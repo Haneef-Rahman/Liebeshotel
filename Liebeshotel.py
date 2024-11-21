@@ -73,15 +73,23 @@ if ('Liebeshotel',) not in CurrentDBS:
             Description VARCHAR(255)
         )
     """)
+    
     Curry.execute("""
-        CREATE TABLE Restaurant_Orders (
+        CREATE TABLE ORDERS (
             Order_ID CHAR(6) PRIMARY KEY,
-            Customer_ID CHAR(8), -- For customers staying at the hotel
-            Room_No INT,         -- Optional, links to the room number
+            Customer_ID CHAR(8),
+            Room_No INT,
             Item_ID CHAR(6) NOT NULL,
             Quantity INT NOT NULL,
             Order_Date DATE NOT NULL,
         );
     """)
+
+
+
+
+
+"""
 Curry.execute("SHOW TABLES")
 print(Curry.fetchall())
+"""
