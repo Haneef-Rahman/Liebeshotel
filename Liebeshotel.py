@@ -90,7 +90,7 @@ if ('Liebeshotel',) not in CurrentDBS:
             Item_Name VARCHAR(50) NOT NULL,
             Category VARCHAR(30) NOT NULL,
             Price INT NOT NULL,
-        );
+        )
 
     """)
     Curry.execute("""
@@ -101,7 +101,13 @@ if ('Liebeshotel',) not in CurrentDBS:
             Item_ID CHAR(6) NOT NULL,
             Quantity INT NOT NULL,
             Order_Date DATE NOT NULL,
-        );
+        )
+    """)
+    Curry.execute("""
+        CREATE TABLE ADMINS (
+            Admin_ID CHAR(6) PRIMARY KEY,
+            EncPass VARCHAR(50) NOT NULL
+        )
     """)
 
 
@@ -169,3 +175,5 @@ for i in txt[2]:
 III. The While loop
 '''
 
+while True:
+    
