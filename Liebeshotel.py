@@ -73,7 +73,15 @@ if ('Liebeshotel',) not in CurrentDBS:
             Description VARCHAR(255)
         )
     """)
-    
+    Curry.execute("""
+        CREATE TABLE MENU (
+            Item_ID CHAR(6) PRIMARY KEY,
+            Item_Name VARCHAR(50) NOT NULL,
+            Category VARCHAR(30) NOT NULL,
+            Price INT NOT NULL,
+        );
+
+    """)
     Curry.execute("""
         CREATE TABLE ORDERS (
             Order_ID CHAR(6) PRIMARY KEY,
@@ -86,8 +94,35 @@ if ('Liebeshotel',) not in CurrentDBS:
     """)
 
 
-
-
+# SAMPLE DATA Specifically for you~~
+Curry.execute("""
+INSERT INTO ROOMS
+VALUES
+    ('101', 'Single Room', 2000, 1, 'Wi-Fi, TV, Desk, Mini-Bar', 20, 1, NULL),
+    ('102', 'Standard Twin Room', 3000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar', 15, 21, NULL),
+    ('201', 'Deluxe Double Room', 5000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar, Coffee Machine, Seating Area', 10, 36, NULL),
+    ('301', 'Junior Suite', 8000, 3, 'Wi-Fi, TV, Desk, Wardrobe, Sofa, Premium Decor, Bath and Shower, Mini-Bar', 5, 46, NULL),
+    ('401', 'Presidential Suite', 20000, 4, 'Wi-Fi, TV, Desk, Wardrobe, Jacuzzi, Butler Service, Smart Devices, Mini-Bar', 3, 51, NULL)
+""")
+Curry.execute("""
+INSERT INTO EXTRAS
+VALUES
+    ('SVC001', 'Minifridge Access', '200', 'Access to minibar items (snacks, drinks) in the room.'),
+    ('SVC003', 'Playroom Card Access', '150', 'Access to the hotel playroom for recreational use.'),
+    ('SVC004', 'Spa Services', '1500', 'Access to spa treatments, massages, sauna, beauty services.'),
+    ('SVC005', 'Transportation', '1250', 'Airport transfers, taxi services, or guided tours.'),
+    ('SVC006', 'Laundry Service', '300', 'Wash, dry, and fold services for clothes.'),
+    ('SVC007', 'Parking Fees', '300', 'Access to hotel parking space.')
+""")
+Curry.execute("""
+INSERT INTO MENU
+VALUES
+    ('ITM001', 'Margherita Pizza', 'Main Course', 500),
+    ('ITM002', 'Caesar Salad', 'Appetizer', 250),
+    ('ITM003', 'Chocolate Lava Cake', 'Dessert', 300),
+    ('ITM004', 'Mango Smoothie', 'Beverage', 150),
+    ('ITM005', 'Grilled Chicken', 'Main Course', 600)
+""")
 
 """
 Curry.execute("SHOW TABLES")
