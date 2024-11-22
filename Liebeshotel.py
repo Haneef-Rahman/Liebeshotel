@@ -3,6 +3,17 @@ import requests
 import datetime
 import time
 
+
+'''
+APPENDIX.
+<comments> All user defined functions here
+'''
+
+'''
+I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
+branch: Haneef, Vasu
+'''
+
 # INITIALISATION of database network, cursor, tempfile
 db=pymysql.connect(host='localhost',user='root',password='12APRIL2002')
 Curry=db.cursor()
@@ -128,3 +139,18 @@ VALUES
 Curry.execute("SHOW TABLES")
 print(Curry.fetchall())
 """
+
+'''
+II. Main interface
+<comments> LOOP starts after this, this won't display again, so don't include 
+information that needs to be displayed again.
+branch:Haneef 
+'''
+
+# Main interafce
+print("\n"*30)
+txt=[
+    '    L         IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO   TTTTTTT   EEEEEEE   L\n    L            I      E         B      B   E        S           H     H   O     O     T      E         L\n    L            I      EEEE      BBBBBBB    EEEE      SSSSSSS    HHHHHHH   O     O     T      EEEE      L\n    L            I      E         B      B   E                S   H     H   O     O     T      E         L\n    LLLLLLL   IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO      T      EEEEEEE   LLLLLLL\n\n',
+    '\n\n\n𝑳𝑰𝑬𝑩𝑬𝑺𝑯𝑶𝑻𝑬𝑳'+"   "*24+'Version 1.0',
+    '\n\n\nLiebeshotel is a Hotel Management interface, '
+]
