@@ -144,13 +144,28 @@ print(Curry.fetchall())
 II. Main interface
 <comments> LOOP starts after this, this won't display again, so don't include 
 information that needs to be displayed again.
-branch:Haneef 
+branch: Haneef, Vasu
 '''
 
 # Main interafce
 print("\n"*30)
 txt=[
     '    L         IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO   TTTTTTT   EEEEEEE   L\n    L            I      E         B      B   E        S           H     H   O     O     T      E         L\n    L            I      EEEE      BBBBBBB    EEEE      SSSSSSS    HHHHHHH   O     O     T      EEEE      L\n    L            I      E         B      B   E                S   H     H   O     O     T      E         L\n    LLLLLLL   IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO      T      EEEEEEE   LLLLLLL\n\n',
-    '\n\n\n𝑳𝑰𝑬𝑩𝑬𝑺𝑯𝑶𝑻𝑬𝑳'+"   "*24+'Version 1.0',
-    '\n\n\nLiebeshotel is a Hotel Management interface, '
+    '\n\n\n𝑾𝑬𝑳𝑪𝑶𝑴𝑬 𝑻𝑶 𝑳𝑰𝑬𝑩𝑬𝑺𝑯𝑶𝑻𝑬𝑳'+"   "*24+'Version 1.0',
+    "\n\n\nLiebeshotel is a Hotel Management interface, it has an in-built resturant for it's customers. Experience luxury\nand comfort at Liebeshotel, your home away from home. Our hotel offers world-class hospitality and modern amenities\nto ensure a memorable stay for every guest. Whether you're traveling for business, leisure, or a family vacation,\nwe provide a perfect blend of elegance and convenience. It offers a range of rooms and serivces including parking\nand transport to the user, also admin has full control over the interface, regarding deletion, and other authorities,\nthe account is protected via encryption.\n\n© Liebeshotel 2024. A program developed by Haneef Rahman, Radhe Nabi, Vasu Garg.\n\n\n\n<#> Press <ENTER> to continue..."
 ]
+
+for i in txt[0]:
+    print(i, end='')
+    time.sleep(0.01)
+for i in txt[1]:
+    print(i, end='')
+    time.sleep(0.01)
+for i in txt[2]:
+    print(i, end='')
+    time.sleep(0.01)
+
+'''
+III. The While loop
+'''
+
