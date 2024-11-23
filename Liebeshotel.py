@@ -1,6 +1,6 @@
 import pymysql
 import random
-import datetime
+from datetime import datetime
 import time
 
 
@@ -161,6 +161,7 @@ def login():
         seclock=5
         while True:
             if seclock=0:
+                Curry.close()
                 exit()
             password=input("Enter password: ")
             passkey=input("Enter key: ")
@@ -190,7 +191,7 @@ def login():
                     break
                 else:
                     print("<!> Invalid. Visitor with ID",name,"does not exist.")
-            tempfile['username']=name
+            tempfile['roomID']=name
             Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
             Names=list(Curry.fetchall())
                 if "('"+name+"',)" in Names:
@@ -198,7 +199,56 @@ def login():
         else:
             register()
 
-    
+def CustomerDashboard(CID):
+    while True:
+        Curry.execute("SELECT * FROM CUSTOMERS WHERE Customer_ID="+str(CID))
+        customer=Curry.fetchone()
+        now = datetime.now()
+        formatted_date = now.strftime("%A, %d %B, %Y")
+        print("\n"*10)
+        print(f"{'Customer Dashboard':<50}{formatted_date:>50}",end='\n\n')
+        print("CUSTOMER ID:",user[0])
+        print(f"--------------------- Customer Information --------------------")
+        print(f"Name:                 {customer[1]}")
+        print(f"Contact Number:       {customer[2]}")
+        print(f"Email:                {customer[3]}")
+        print(f"\n------------------- Room Information ------------------------")
+        print(f"Room ID:              {customer[4]}")
+        print(f"Room Number:          {customer[6]}")
+        print(f"Room Type:            {customer[5]}")
+        print(f"Check-in Date:        {customer[7]}")
+        print(f"Check-out Date:       {customer[8]}")
+        print(f"Number of Nights:     {customer[9]}")
+        print(f"\n------------------- Billing Information ---------------------")
+        print(f"Room Bill:            ₹{customer[10]}")
+        print(f"Extra Costs:          ₹{customer[11]}")
+        print(f"Total Bill:           ₹{customer[12]}")
+        print(f"\n------------------- Services --------------------------------")
+        print(f"Services Used:        {customer[13]}")
+
+        while True:
+            ask=input("\n\nActions:\n1:Resturant Orders\n2:Log-out\n3:Quit\n4:Cancellation(No refund)\n\n<?> ")
+            if ask in '1','2','3','4':
+                break
+            else:
+                print("<!> Invalid action, try again.")
+        if ask=='2':
+            break
+        elif ask=='3':
+            Curry.close()
+            exit()
+        elif ask=='4':
+            Conf=input("NO REFUND POLICY: Please note that all payments made for bookings, services, and products are non-refundable. Once\na transaction has been completed, no refunds will be issued, regardless of any changes to your plans or circumstances.\nThank you for your understanding.\n\nAre you sure you want to proceed with cancellation?(Y/N) ").upper()
+            if Conf=='Y':
+                print(f"\n------------------- Billing Information ---------------------")
+                print(f"Room Bill:            ₹{customer[10]}")
+                print(f"Extra Costs:          ₹{customer[11]}")
+                print(f"Total Bill:           ₹{customer[12]}")
+                print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
+                Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
+        else:
+            
+
 
 '''
 I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
@@ -335,7 +385,7 @@ print(Curry.fetchall())
 II. Main interface
 <comments> LOOP starts after this, this won't display again, so don't include 
 information that needs to be displayed again.
-branch: Haneef
+branch: Haneef, Vasu
 '''
 
 # Main interafce
@@ -358,10 +408,11 @@ for i in txt[2]:
 
 '''
 III. The While loop
+branch: Haneef, Radhe
 '''
 
 while True:
     login()
     if tempfile['accesstype']=='C':
-        CustomerDashboard()
+        CustomerDashboard(tempfile['roomID'])
 
