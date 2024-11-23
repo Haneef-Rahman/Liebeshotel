@@ -11,7 +11,8 @@ tempfile={
     'accesstype':None,
     'logintype':None,
     'username':None,
-    'EncPass':None
+    'EncPass':None,
+    'roomID':None
 }
 
 '''
@@ -42,7 +43,95 @@ def xor_decrypt(encrypted_password, key):
     return decrypted_bytes.decode('utf-8')
 
 def register():
-    
+    CustomerName=input("Enter vistor name: ")
+    while True:
+        try:
+            PhoneNo=int(input("Enter phone number: "))
+            if len(str(PhoneNo))==10:
+                break
+            else:
+                print("<!> Invalid Phone number.")
+        except:
+            print("<!> Invalid Phone number.")
+    Email=input("Enter email: ")
+    Curry.execute("SELECT * FROM ROOMS")
+    ROOMS=Curry.fetchall()
+    RoomID=[]
+    print("\n================= Available Rooms =================\n")
+    for room in ROOMS:
+        room_id, room_type, price, max_occupancy, amenities = room
+        RoomID.append(room_id)
+
+        print(f"Room ID:           {room_id}")
+        print(f"Room Type:         {room_type}")
+        print(f"Price per Night:   ₹{price}")
+        print(f"Max Occupancy:     {max_occupancy} Person(s)")
+        print(f"Amenities:         {amenities}")
+        print("\n" + "-" * 50 + "\n")
+    while True:
+        try:
+            roomID=int(input("Enter room ID of room of choice: "))
+            if roomID in RoomID:
+                break
+            else:
+                print("<!> RoomID is invalid.")
+        except:
+            print("<!> RoomID is invalid.")
+    tempfile['roomID']=roomID
+    while True:
+        try:
+            NON=int(input("Enter number of nights of stay: "))
+            break
+        except:
+            print("<!> Invalid, kindly use integers only.")
+    Curry.execute("SELECT Customer_ID FROM CUSTOMERS")
+    CIDs=Curry.fetchall()
+    while True:
+        CID='C'+str(random.randint(10000, 99999))
+        for i in CIDs:
+            for j in i:
+                if j==CID:
+                    break
+            else:
+                break
+        else:
+            break
+    Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
+    CROOM=Curry.fetchall()
+    if CROOM[0][8]==None:
+        roomNo=CROOM[0][7]
+    else:
+        roomNo=CROOM[0][8]+1
+
+    Curry.execute("SELECT * FROM EXTRAS")
+    extras = Curry.fetchall()
+    print("=" * 25 + " Available Extras " + "=" * 25)
+    for extra in extras:
+        print(f"Service Code:    {extra[0]}")
+        print(f"Service Name:    {extra[1]}")
+        print(f"Cost per Unit:   ₹{extra[2]}")
+        print(f"Description:     {extra[3]}")
+        print("-" * 50)
+    service_dict = {}
+    for service in extras:
+        service_dict[service[0]]=int(service[2])
+    codeschosen = input("Enter service codes separated by commas (e.g., SVC004, SVC006): ")
+    entered_codes = []
+    for code in codeschosen.split(","):
+        entered_codes.append(code.strip())
+    valid_codes = []
+    extra_cost = 0
+    for code in entered_codes:
+        if code in service_dict:
+            valid_codes.append(code)
+            extra_cost += service_dict[code]
+        else:
+            print(f"Invalid service code: {code}")
+
+# Combine valid codes into a comma-separated string
+valid_codes_string = ", ".join(valid_codes)
+
+        
 
 def login():
     while True:
@@ -55,7 +144,7 @@ def login():
     tempfile['accesstype']=tYPE
     if tYPE=='A':
         while True:
-            name=input("Enter adminname: ")
+            name=input("Enter adminID: ")
             Curry.execute("SELECT Admin_ID FROM ADMINS")
             Names=list(Curry.fetchall())
             if "('"+name+"',)" in Names:
@@ -90,14 +179,14 @@ def login():
         tempfile['logintype']=loginType
         if loginType=='L':
             while True:
-                name=input("Enter username: ")
+                name=input("Enter userID: ")
                 Curry.execute("SELECT Customer_ID FROM CUSTOMERS")
                 Names=list(Curry.fetchall())
                 if "('"+name+"',)" in Names:
                     print("<#> Successful login!")
                     break
                 else:
-                    print("<!> Invalid. Visitor with name",name,"does not exist.")
+                    print("<!> Invalid. Visitor with ID",name,"does not exist.")
             tempfile['username']=name
             Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
             Names=list(Curry.fetchall())
@@ -128,8 +217,8 @@ if ('Liebeshotel',) not in CurrentDBS:
             Amenities VARCHAR(700) NOT NULL,
             Available_Rooms INT NOT NULL,
             Total_Rooms INT NOT NULL,
-            Beginnt INT NOT NULL,
-            Neueste INT
+            Beginning_no INT NOT NULL,
+            Latest_used_no INT
         )
     """)
     Curry.execute("""
