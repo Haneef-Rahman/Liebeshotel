@@ -1,6 +1,5 @@
 import pymysql
 import random
-import requests
 import datetime
 import time
 
@@ -9,8 +8,9 @@ import time
 db=pymysql.connect(host='localhost',user='root',password='12APRIL2002')
 Curry=db.cursor()
 tempfile={
-    'accesstype':None
-    'username':None
+    'accesstype':None,
+    'logintype':None,
+    'username':None,
     'EncPass':None
 }
 
@@ -19,6 +19,31 @@ APPENDIX.
 <comments> All user defined functions here
 branch: Haneef
 '''
+
+# XOR Encryption/Decryption
+def xor_encrypt(password, key):
+    key_bytes = key.to_bytes(4, 'big')
+    password_bytes = password.encode('utf-8')
+    key_repeated = key_bytes * (len(password_bytes) // 4) + key_bytes[:len(password_bytes) % 4]
+    encrypted_bytes = bytearray()
+    for i in range(len(password_bytes)):
+        encrypted_bytes.append(password_bytes[i] ^ key_repeated[i])
+    
+    return encrypted_bytes.hex()
+
+def xor_decrypt(encrypted_password, key):
+    key_bytes = key.to_bytes(4, 'big')
+    encrypted_bytes = bytes.fromhex(encrypted_password)
+    key_repeated = key_bytes * (len(encrypted_bytes) // 4) + key_bytes[:len(encrypted_bytes) % 4]
+    decrypted_bytes = bytearray()
+    for i in range(len(encrypted_bytes)):
+        decrypted_bytes.append(encrypted_bytes[i] ^ key_repeated[i])
+    
+    return decrypted_bytes.decode('utf-8')
+
+def register():
+    
+
 def login():
     while True:
         print("\n"*2)
@@ -37,6 +62,7 @@ def login():
                 break
             else:
                 print("<!> Invalid. Admin with name",name,"does not exist.")
+        tempfile['username']=name
         Curry.execute("SELECT EncPass from ADMINS WHERE Admin_ID="+name)
         result=Curry.fetchone()
         tempfile['EncPass']=result[0]
@@ -46,14 +72,45 @@ def login():
                 exit()
             password=input("Enter password: ")
             passkey=input("Enter key: ")
-
-
+            try:
+                DecPass = xor_decrypt(tempfile['EncPass'],int(passkey))
+                if password == DecPass:
+                    print("<#> Successful login!")
+                    break
+                else:
+                    print("<!> Invalid Passkey and/or password.",seclock-1,"attemps left.")
+            except:
+                print("<!> Invalid Passkey and/or password.",seclock-1,"attemps left.")
+            seclock-=1
     elif tYPE=='C':
+        while True:
+            loginType=input("Login(L)/Register(R)? ").upper()
+            if loginType in 'L','R':
+                break
+        tempfile['logintype']=loginType
+        if loginType=='L':
+            while True:
+                name=input("Enter username: ")
+                Curry.execute("SELECT Customer_ID FROM CUSTOMERS")
+                Names=list(Curry.fetchall())
+                if "('"+name+"',)" in Names:
+                    print("<#> Successful login!")
+                    break
+                else:
+                    print("<!> Invalid. Visitor with name",name,"does not exist.")
+            tempfile['username']=name
+            Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
+            Names=list(Curry.fetchall())
+                if "('"+name+"',)" in Names:
+                    print("Welcome Back!",name)
+        else:
+            register()
+
     
 
 '''
 I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
-branch: Haneef, Vasu
+branch: Haneef, Vasu, Radhe
 '''
 
 # INITIALISATION of TABLE ROOMS, CUTOMERS, EXTRAS, PREVCUSTOMERS
@@ -186,7 +243,7 @@ print(Curry.fetchall())
 II. Main interface
 <comments> LOOP starts after this, this won't display again, so don't include 
 information that needs to be displayed again.
-branch: Haneef, Vasu
+branch: Haneef
 '''
 
 # Main interafce
@@ -212,3 +269,6 @@ III. The While loop
 '''
 
 while True:
+    login()
+    if tempfile['accesstype']=='C':
+
