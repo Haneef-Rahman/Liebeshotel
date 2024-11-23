@@ -99,6 +99,7 @@ def register():
             break
     Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
     CROOM=Curry.fetchall()
+    tempfile['username']=CID
     if CROOM[0][8]==None:
         roomNO=CROOM[0][7]
     else:
@@ -191,7 +192,7 @@ def login():
                     break
                 else:
                     print("<!> Invalid. Visitor with ID",name,"does not exist.")
-            tempfile['roomID']=name
+            tempfile['username']=name
             Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
             Names=list(Curry.fetchall())
                 if "('"+name+"',)" in Names:
@@ -292,6 +293,30 @@ def CustomerDashboard(CID):
             print(f"\nTotal Price: ₹{total_price}")
             print("Thank you for your order!")
 
+def AdminDashboard(AID):
+    Actions={
+        1:'Show Rooms',
+        2:'Add Room',
+        3:'Edit Room',
+        4:'Delete Room',
+        5:'Show Customers',
+        6:'Delete Customers',
+        7:'Show Previous Customers',
+        8:'Show Extras',
+        9:'Add Extra',
+        10:'Edit Extra',
+        11:'Delete Extra',
+        12:'Show Menu',
+        13:'Add Menu',
+        14:'Edit Menu',
+        15:'Delete Menu',
+        16:'Show Orders',
+        17:'Add Admin',
+        18:'Change Password',
+        19:'Log-out'
+        20:'Quit'
+    }
+    while True:
 
 
 '''
@@ -458,5 +483,7 @@ branch: Haneef, Radhe
 while True:
     login()
     if tempfile['accesstype']=='C':
-        CustomerDashboard(tempfile['roomID'])
+        CustomerDashboard(tempfile['username'])
+    elif tempfile['accesstype']=='A':
+        AdminDashboard(tempfile['username'])
 
