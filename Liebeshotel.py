@@ -1,4 +1,5 @@
 import pymysql
+import random
 import requests
 import datetime
 import time
@@ -10,6 +11,7 @@ Curry=db.cursor()
 tempfile={
     'accesstype':None
     'username':None
+    'EncPass':None
 }
 
 '''
@@ -35,11 +37,17 @@ def login():
                 break
             else:
                 print("<!> Invalid. Admin with name",name,"does not exist.")
-        seclock=0
+        Curry.execute("SELECT EncPass from ADMINS WHERE Admin_ID="+name)
+        result=Curry.fetchone()
+        tempfile['EncPass']=result[0]
+        seclock=5
         while True:
-            if seclock>5:
+            if seclock=0:
                 exit()
-            password=
+            password=input("Enter password: ")
+            passkey=input("Enter key: ")
+
+
     elif tYPE=='C':
     
 
