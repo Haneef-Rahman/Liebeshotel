@@ -247,7 +247,51 @@ def CustomerDashboard(CID):
                 print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
                 Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
         else:
-            
+            Curry.execute("SELECT * FROM MENU")
+            menu_items = cursor.fetchall()
+            print("=========== MENU ===========")
+            for item in menu_items:
+                print(f"Item ID: {item[0]}")
+                print(f"Item Name: {item[1]}")
+                print(f"Category: {item[2]}")
+                print(f"Price: ₹{item[3]}")
+                print("----------------------------")
+
+            num_items = int(input("How many items would you like to order? "))
+            total_price = 0
+            for i in range(num_items):
+                while True:
+                    item_id = input(f"Enter the Item_ID for item {i+1}: ")
+                    cursor.execute("SELECT * FROM MENU WHERE Item_ID = %s", (item_id,))
+                    item = cursor.fetchone()
+
+                    if item:
+                        print(f"Item Name: {item[1]}")
+                        print(f"Price: ₹{item[3]}")
+                        quantity = int(input(f"How many of {item[1]} would you like to order? "))
+                        total_price += item[3] * quantity
+                        
+                        Curry.execute("SELECT Order_ID FROM ORDERS")
+                        OIDs=Curry.fetchall()
+                        while True:
+                            OID='O'+str(random.randint(10000, 99999))
+                                for i in OIDs:
+                                    for j in i:
+                                        if j==OID:
+                                            break
+                                    else:
+                                        break
+                                else:
+                                    break
+                        Curry.execute("INSERT INTO ORDERS VALUES ("+str(OID)+", "+str(CID)+", "+str(customer[6])+", "+item_id+", "+str(quantity)+", CURDATE())")
+                        break
+                    else:
+                        print("Invalid Item ID. Please try again.")
+
+            Curry.execute("UPDATE CUSTOMERS SET Extra_Costs="+str(total_price)+" WHERE Customer_ID="+str(CID))
+            print(f"\nTotal Price: ₹{total_price}")
+            print("Thank you for your order!")
+
 
 
 '''
