@@ -12,7 +12,8 @@ tempfile={
     'logintype':None,
     'username':None,
     'EncPass':None,
-    'roomID':None
+    'roomNO':None,
+    'roomID':None,
 }
 
 '''
@@ -99,9 +100,12 @@ def register():
     Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
     CROOM=Curry.fetchall()
     if CROOM[0][8]==None:
-        roomNo=CROOM[0][7]
+        roomNO=CROOM[0][7]
     else:
-        roomNo=CROOM[0][8]+1
+        roomNO=CROOM[0][8]+1
+    tempfile['roomNO']=roomNO
+    Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no="+str(roomNo)+" WHERE RoomID="+str(roomID))
+    room_bill=int(CROOM[2])*NON
 
     Curry.execute("SELECT * FROM EXTRAS")
     extras = Curry.fetchall()
@@ -120,18 +124,17 @@ def register():
     for code in codeschosen.split(","):
         entered_codes.append(code.strip())
     valid_codes = []
-    extra_cost = 0
+    extra_costs = 0
     for code in entered_codes:
         if code in service_dict:
             valid_codes.append(code)
-            extra_cost += service_dict[code]
+            extra_costs += service_dict[code]
         else:
             print(f"Invalid service code: {code}")
-
-# Combine valid codes into a comma-separated string
-valid_codes_string = ", ".join(valid_codes)
-
-        
+    valid_codes_string = ", ".join(valid_codes)
+    
+    # FINALLY!!!! TIME TO INSERT THE CUSTOMER, IT WAS SO CUMBERSOME!!!!!!!!
+    Curry.execute("INSERT INTO CUSTOMERS VALUES ("+str(CID)+", "+CustomerName+", "+str(PhoneNo)+", "+Email+", "+str(roomID)+", "+str(CROOM[1])+", "+str(roomNO)+", CURDATE(), DATE_ADD(CURDATE(), INTERVAL "+str(NON)+" DAY), "+str(NON)+", "+str(room_bill)+", "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
 
 def login():
     while True:
@@ -296,11 +299,11 @@ if ('Liebeshotel',) not in CurrentDBS:
 Curry.execute("""
 INSERT INTO ROOMS
 VALUES
-    ('101', 'Single Room', 2000, 1, 'Wi-Fi, TV, Desk, Mini-Bar', 20, 1, NULL),
-    ('102', 'Standard Twin Room', 3000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar', 15, 21, NULL),
-    ('201', 'Deluxe Double Room', 5000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar, Coffee Machine, Seating Area', 10, 36, NULL),
-    ('301', 'Junior Suite', 8000, 3, 'Wi-Fi, TV, Desk, Wardrobe, Sofa, Premium Decor, Bath and Shower, Mini-Bar', 5, 46, NULL),
-    ('401', 'Presidential Suite', 20000, 4, 'Wi-Fi, TV, Desk, Wardrobe, Jacuzzi, Butler Service, Smart Devices, Mini-Bar', 3, 51, NULL)
+    ('101', 'Single Room', 2000, 1, 'Wi-Fi, TV, Desk, Mini-Bar', 20, 20, 1, NULL),
+    ('102', 'Standard Twin Room', 3000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar', 15, 15, 21, NULL),
+    ('201', 'Deluxe Double Room', 5000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar, Coffee Machine, Seating Area', 10, 10, 36, NULL),
+    ('301', 'Junior Suite', 8000, 3, 'Wi-Fi, TV, Desk, Wardrobe, Sofa, Premium Decor, Bath and Shower, Mini-Bar', 5, 5, 46, NULL),
+    ('401', 'Presidential Suite', 20000, 4, 'Wi-Fi, TV, Desk, Wardrobe, Jacuzzi, Butler Service, Smart Devices, Mini-Bar', 3, 3, 51, NULL)
 """)
 Curry.execute("""
 INSERT INTO EXTRAS
@@ -360,4 +363,5 @@ III. The While loop
 while True:
     login()
     if tempfile['accesstype']=='C':
+        CustomerDashboard()
 
