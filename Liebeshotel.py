@@ -4,22 +4,49 @@ import datetime
 import time
 
 
-'''
-APPENDIX.
-<comments> All user defined functions here
-'''
-
-'''
-I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
-branch: Haneef, Vasu
-'''
-
 # INITIALISATION of database network, cursor, tempfile
 db=pymysql.connect(host='localhost',user='root',password='12APRIL2002')
 Curry=db.cursor()
 tempfile={
     'accesstype':None
+    'username':None
 }
+
+'''
+APPENDIX.
+<comments> All user defined functions here
+branch: Haneef
+'''
+def login():
+    while True:
+        print("\n"*2)
+        tYPE=input("<𝑳> Enter login type (A:Admin, C:Customer): ").upper()
+        if tYPE in 'A','C':
+            break
+        else:
+            print("<!> Invalid type. Use 'A' or 'C' ONLY.")
+    tempfile['accesstype']=tYPE
+    if tYPE=='A':
+        while True:
+            name=input("Enter adminname: ")
+            Curry.execute("SELECT Admin_ID FROM ADMINS")
+            Names=list(Curry.fetchall())
+            if "('"+name+"',)" in Names:
+                break
+            else:
+                print("<!> Invalid. Admin with name",name,"does not exist.")
+        seclock=0
+        while True:
+            if seclock>5:
+                exit()
+            password=
+    elif tYPE=='C':
+    
+
+'''
+I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
+branch: Haneef, Vasu
+'''
 
 # INITIALISATION of TABLE ROOMS, CUTOMERS, EXTRAS, PREVCUSTOMERS
 Curry.execute("SHOW DATABASES")
@@ -140,6 +167,7 @@ VALUES
     ('ITM004', 'Mango Smoothie', 'Beverage', 150),
     ('ITM005', 'Grilled Chicken', 'Main Course', 600)
 """)
+Curry.execute("INSERT INTO ADMIN VALUES")
 
 """
 Curry.execute("SHOW TABLES")
@@ -176,4 +204,3 @@ III. The While loop
 '''
 
 while True:
-    
