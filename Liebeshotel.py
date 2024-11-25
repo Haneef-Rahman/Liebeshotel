@@ -43,6 +43,45 @@ def xor_decrypt(encrypted_password, key):
     
     return decrypted_bytes.decode('utf-8')
 
+def show(TABLE):
+    Curry.execute("SELECT * FROM", TABLE)
+    records=Curry.fetchall()
+    header = [desc[0] for desc in Curry.description]
+    column_widths = [max(len(str(row[i])) for row in records) if records else 0 for i in range(len(headers))]
+    column_widths = [max(len(header), width) for header, width in zip(headers, column_widths)]
+    header_row = " | ".join(header.ljust(width) for header, width in zip(headers, column_widths))
+    print(header_row)
+    print("-" * len(header_row))
+    for record in records:
+        row = " | ".join(str(value).ljust(width) for value, width in zip(record, column_widths))
+        print(row)
+
+def delete(TABLE):
+    if TABLE=="ROOMS":
+        try:
+            PrimaryID=input("Kindly enter the Room_ID TO BE DELETED")
+            Curry.execute("DELETE FROM ROOMS WHERE Room_ID="+str(PrimaryID))
+        except:
+            print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
+    elif TABLE=="CUSTOMERS":
+        try:
+            PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
+            Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
+        except:
+            print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
+    elif TABLE=="EXTRAS":
+        try:
+            PrimaryID=input("Kindly enter the Service_Code TO BE DELETED")
+            Curry.execute("DELETE FROM EXTRAS WHERE Service_Code="+str(PrimaryID))
+        except:
+            print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
+    elif TABLE=="MENU":
+        try:
+            PrimaryID=input("Kindly enter the Item_ID TO BE DELETED")
+            Curry.execute("DELETE FROM MENU WHERE Item_ID="+str(PrimaryID))
+        except:
+            print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
+
 def register():
     CustomerName=input("Enter vistor name: ")
     while True:
@@ -179,7 +218,7 @@ def login():
     elif tYPE=='C':
         while True:
             loginType=input("Login(L)/Register(R)? ").upper()
-            if loginType in 'L','R':
+            if loginType in ['L','R']:
                 break
         tempfile['logintype']=loginType
         if loginType=='L':
@@ -229,7 +268,7 @@ def CustomerDashboard(CID):
 
         while True:
             ask=input("\n\nActions:\n1:Resturant Orders\n2:Log-out\n3:Quit\n4:Cancellation(No refund)\n\n<?> ")
-            if ask in '1','2','3','4':
+            if ask in ['1','2','3','4']:
                 break
             else:
                 print("<!> Invalid action, try again.")
@@ -313,11 +352,49 @@ def AdminDashboard(AID):
         16:'Show Orders',
         17:'Add Admin',
         18:'Change Password',
-        19:'Log-out'
-        20:'Quit'
+        19:'Custom operations',
+        20:'Log-out',
+        21:'Quit'
     }
     while True:
+        print("Actions:")
+        for act in Actions:
+            print(" "*5,end='')
+            print(act)
+        while True:
+            try:
+                act=int(input("<?> Enter choice: "))
+                if act in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]:
+                    break
+                else:
+                    print("Invalid choice. Try again.")
+            except:
+                print("Invalid choice. Try again.")
+        #All "Show" actions
+        if act==1:
+            show("ROOMS")
+        elif act==5:
+            show("CUSTOMERS")
+        elif act==7:
+            show("PREVCUSTOMERS")
+        elif act==8:
+            show("EXTRAS")
+        elif act==12:
+            show("MENU")
+        elif act==16:
+            show("ORDERS")
+        
+        #All "Delete" actions
+        elif act==4:
+            delete("ROOMS")
+        elif act==6:
+            delete("CUSTOMERS")
+        elif act==11:
+            delete("EXTRAS")
+        elif act==15:
+            delete("MENU")
 
+        #All "Add" actions
 
 '''
 I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
