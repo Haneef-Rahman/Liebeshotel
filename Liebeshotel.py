@@ -43,6 +43,14 @@ def xor_decrypt(encrypted_password, key):
     
     return decrypted_bytes.decode('utf-8')
 
+def Add(TABLE):
+    if TABLE=="ROOMS":
+        try:
+            Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
+            Room_Type=input("Enter Room Type (40 Charecters max.): ")
+
+
+
 def show(TABLE):
     Curry.execute("SELECT * FROM", TABLE)
     records=Curry.fetchall()
@@ -66,7 +74,16 @@ def delete(TABLE):
     elif TABLE=="CUSTOMERS":
         try:
             PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
+            Curry.execute("SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
+            rec=Curry.fetchone[0]
             Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
+            Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(rec))
+            Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(rec))
+            Trec=Curry.fetchone()
+            if Trec[0]==Trec[1]:
+                Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(rec))
+            else:
+                Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(rec))
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="EXTRAS":
@@ -286,6 +303,14 @@ def CustomerDashboard(CID):
                 print(f"Total Bill:           ₹{customer[12]}")
                 print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
                 Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
+                Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(customer[4]))
+                Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(customer[4]))
+                Trec=Curry.fetchone()
+                if Trec[0]==Trec[1]:
+                    Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
+                else:
+                    Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
+                
         else:
             Curry.execute("SELECT * FROM MENU")
             menu_items = cursor.fetchall()
