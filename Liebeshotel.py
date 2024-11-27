@@ -48,6 +48,7 @@ def Add(TABLE):
         try:
             Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
             Room_Type=input("Enter Room Type (40 Charecters max.): ")
+            
 
 
 
