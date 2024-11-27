@@ -45,6 +45,7 @@ def xor_decrypt(encrypted_password, key):
 
 def Add(TABLE):
     if TABLE=="ROOMS":
+        while True:
             try:
                 Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
                 Room_Type=input("Enter Room Type (40 Charecters max.): ")
@@ -52,6 +53,7 @@ def Add(TABLE):
                 Occ=int(input("Enter maximum occupancy (integral): "))
                 Amenities=input("Enter available services (700 charecters or less): ")
                 Tot=int(input("Enter total no. of rooms (integral): "))
+                Curry.execute("SELECT *")
 
             except:
                 print("<!> Invalid Entry. Kindly retry.")
