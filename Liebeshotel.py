@@ -56,6 +56,20 @@ def Add(TABLE):
                 Curry.execute("SELECT *")
             except:
                 print("<!> Invalid Entry. Kindly retry.")
+    elif TABLE=='EXTRAS':
+        while True:
+            try:
+                Service_Code=input("Enter Servic Code (6 characters): ")
+                Service_Name=input("Enter Servic Name (50 Numbers/characters): ")
+                Cost_Per_Unit=int(input("Enter Cost Per Unit: "))
+                Description=input("Enter Description (255 characters max): ")
+                Curry.execute(f"""
+                    INSERT INTO EXTRAS VALUES(
+                        {Service_Code},{Service_Name},{Cost_Per_Unit},{Description}
+                    )
+                """)
+            except:
+                print("<!> Invalid Entry. Kindly retry.")
 
 def show(TABLE):
     Curry.execute("SELECT * FROM", TABLE)
@@ -491,7 +505,7 @@ if ('Liebeshotel',) not in CurrentDBS:
         CREATE TABLE EXTRAS (
             Service_Code CHAR(6) NOT NULL,
             Service_Name VARCHAR(50) NOT NULL,
-            Cost_Per_Unit VARCHAR(20) NOT NULL,
+            Cost_Per_Unit INT NOT NULL,
             Description VARCHAR(255)
         )
     """)
