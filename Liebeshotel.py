@@ -48,8 +48,16 @@ def Add(TABLE):
         try:
             Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
             Room_Type=input("Enter Room Type (40 Charecters max.): ")
+<<<<<<< Updated upstream
             
 
+=======
+            PricePN=int(input("Enter price per night (integral) in INR: "))
+            Occ=int(input("Enter maximum occupancy (integral): "))
+            Amenities=input("Enter the services provided: ")
+            Total=int(input("Enter total number of rooms available: "))
+            Curry.execute("SELECT ")
+>>>>>>> Stashed changes
 
 
 def show(TABLE):
