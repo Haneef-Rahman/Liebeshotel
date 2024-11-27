@@ -54,7 +54,6 @@ def Add(TABLE):
                 Amenities=input("Enter available services (700 charecters or less): ")
                 Tot=int(input("Enter total no. of rooms (integral): "))
                 Curry.execute("SELECT *")
-
             except:
                 print("<!> Invalid Entry. Kindly retry.")
 
