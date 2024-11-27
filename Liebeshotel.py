@@ -45,12 +45,16 @@ def xor_decrypt(encrypted_password, key):
 
 def Add(TABLE):
     if TABLE=="ROOMS":
-        try:
-            Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
-            Room_Type=input("Enter Room Type (40 Charecters max.): ")
-            
+            try:
+                Room_ID=input("Enter Room ID (3 Numbers/charecters): ")
+                Room_Type=input("Enter Room Type (40 Charecters max.): ")
+                PricePN=int(input("Enter Price per night (integral) in INR: "))
+                Occ=int(input("Enter maximum occupancy (integral): "))
+                Amenities=input("Enter available services (700 charecters or less): ")
+                Tot=int(input("Enter total no. of rooms (integral): "))
 
-
+            except:
+                print("<!> Invalid Entry. Kindly retry.")
 
 def show(TABLE):
     Curry.execute("SELECT * FROM", TABLE)
@@ -198,7 +202,7 @@ def login():
     while True:
         print("\n"*2)
         tYPE=input("<𝑳> Enter login type (A:Admin, C:Customer): ").upper()
-        if tYPE in 'A','C':
+        if tYPE in ['A','C']:
             break
         else:
             print("<!> Invalid type. Use 'A' or 'C' ONLY.")
@@ -218,7 +222,7 @@ def login():
         tempfile['EncPass']=result[0]
         seclock=5
         while True:
-            if seclock=0:
+            if seclock==0:
                 Curry.close()
                 exit()
             password=input("Enter password: ")
@@ -252,8 +256,8 @@ def login():
             tempfile['username']=name
             Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
             Names=list(Curry.fetchall())
-                if "('"+name+"',)" in Names:
-                    print("Welcome Back!",name)
+            if "('"+name+"',)" in Names:
+                print("Welcome Back!",name)
         else:
             register()
 
@@ -341,14 +345,14 @@ def CustomerDashboard(CID):
                         OIDs=Curry.fetchall()
                         while True:
                             OID='O'+str(random.randint(10000, 99999))
-                                for i in OIDs:
-                                    for j in i:
-                                        if j==OID:
-                                            break
-                                    else:
+                            for i in OIDs:
+                                for j in i:
+                                    if j==OID:
                                         break
                                 else:
                                     break
+                            else:
+                                break
                         Curry.execute("INSERT INTO ORDERS VALUES ("+str(OID)+", "+str(CID)+", "+str(customer[6])+", "+item_id+", "+str(quantity)+", CURDATE())")
                         break
                     else:
