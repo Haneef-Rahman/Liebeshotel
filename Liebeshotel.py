@@ -53,7 +53,28 @@ def Add(TABLE):
                 Occ=int(input("Enter maximum occupancy (integral): "))
                 Amenities=input("Enter available services (700 charecters or less): ")
                 Tot=int(input("Enter total no. of rooms (integral): "))
-                Curry.execute("SELECT *")
+                Curry.execute("SELECT * FROM ROOMS")
+                trec=Curry.fetchall(); Room_IDs=[]
+                for i in trec:
+                    Room_IDs.append(trec[0])
+                if Room_ID not in Room_IDs:
+                    Room_Types
+                    for i in trec:
+                        Room_Types.append(trec[1])
+                    if Room_Type not in Room_Types:             
+                        Curry.execute("SELECT MAX(Beginning_no) FROM ROOMS")
+                        Beginnt=Curry.fetchone()
+                        Beginnt=Beginnt[0]
+                        Curry.execute("SELECT Total_Rooms FROM ROOMS WHERE Beginning_no="+str(Beginnt))
+                        TTot=Curry.fetchone()
+                        TTot=TTot[0]
+                        Beginnt=int(Beginnt)+int(TTot)
+                        Curry.execute(f"INSERT INTO ROOMS VALUES ('{Room_ID}', '{Room_Type}', {PricePN}, {Occ}, '{Amenities}', {Tot}, {Tot}, {Beginnt}, NULL)")
+                        break
+                    else:
+                        print("Room Type already exists.")
+                else:
+                    print("Room ID already exists.")
             except:
                 print("<!> Invalid Entry. Kindly retry.")
 
