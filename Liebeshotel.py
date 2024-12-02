@@ -53,8 +53,16 @@ def Add(TABLE):
                 Occ=int(input("Enter maximum occupancy (integral): "))
                 Amenities=input("Enter available services (700 charecters or less): ")
                 Tot=int(input("Enter total no. of rooms (integral): "))
-                Curry.execute("SELECT * FROM ROOMS")
-                
+                Curry.execute("SELECT MAX(Beginning_no) FROM ROOMS")
+                Tbeg=Curry.fetchone(); Tbeg=Tbeg[0]
+                Curry.execute("SELECT Total_Rooms FROM ROOMS WHERE Beginning_no="str(Tbeg))
+                Ttot=Curry.fetchone(); Ttot=Ttot[0]
+                Beg=int(Tbeg)+int(Ttot)
+                Curry.execute(f"""
+                    INSERT INTO ROOMS VALUES(
+                        '{Room_ID}','{Room_Type}',{PricePN},{Occ},'{Amenities}',{Tot},{Tot},{Beg},NULL
+                    )
+                """)
             except:
                 print("<!> Invalid Entry. Kindly retry.")
     elif TABLE=="EXTRAS":
