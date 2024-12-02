@@ -53,10 +53,11 @@ def Add(TABLE):
                 Occ=int(input("Enter maximum occupancy (integral): "))
                 Amenities=input("Enter available services (700 charecters or less): ")
                 Tot=int(input("Enter total no. of rooms (integral): "))
-                Curry.execute("SELECT *")
+                Curry.execute("SELECT * FROM ROOMS")
+                
             except:
                 print("<!> Invalid Entry. Kindly retry.")
-    elif TABLE=='EXTRAS':
+    elif TABLE=="EXTRAS":
         while True:
             try:
                 Service_Code=input("Enter Servic Code (6 characters): ")
@@ -65,7 +66,21 @@ def Add(TABLE):
                 Description=input("Enter Description (255 characters max): ")
                 Curry.execute(f"""
                     INSERT INTO EXTRAS VALUES(
-                        {Service_Code},{Service_Name},{Cost_Per_Unit},{Description}
+                        '{Service_Code}','{Service_Name}',{Cost_Per_Unit},'{Description}'
+                    )
+                """)
+            except:
+                print("<!> Invalid Entry. Kindly retry.")
+    elif TABLE=="MENU":
+        while True:
+            try:
+                Item_ID=input("Enter Item ID (6 characters): ")
+                Item_Name=input("Enter Item Name (50 Numbers/characters): ")
+                Category=int(input("Enter Category (30 charecters): "))
+                Price=input("Enter Price (integral): ")
+                Curry.execute(f"""
+                    INSERT INTO MENU VALUES(
+                        '{Item_ID}','{Item_Name_Name}','{Category}',{Price}
                     )
                 """)
             except:
