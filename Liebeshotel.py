@@ -63,6 +63,7 @@ def add(TABLE):
                         '{Room_ID}','{Room_Type}',{PricePN},{Occ},'{Amenities}',{Tot},{Tot},{Beg},NULL
                     )
                 """)
+                db.commit()
                 break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
@@ -78,6 +79,7 @@ def add(TABLE):
                         '{Service_Code}','{Service_Name}',{Cost_Per_Unit},'{Description}'
                     )
                 """)
+                db.commit()
                 break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
@@ -93,6 +95,7 @@ def add(TABLE):
                         '{Item_ID}','{Item_Name_Name}','{Category}',{Price}
                     )
                 """)
+                db.commit()
                 break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
@@ -115,6 +118,7 @@ def delete(TABLE):
         try:
             PrimaryID=input("Kindly enter the Room_ID TO BE DELETED")
             Curry.execute("DELETE FROM ROOMS WHERE Room_ID="+str(PrimaryID))
+            db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="CUSTOMERS":
@@ -125,6 +129,7 @@ def delete(TABLE):
             Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
             Prec=Curry.fetchone()
             Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {Prec}")
+            db.commit()
             Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
             Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(rec))
             Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(rec))
@@ -133,18 +138,21 @@ def delete(TABLE):
                 Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(rec))
             else:
                 Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(rec))
+            db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="EXTRAS":
         try:
             PrimaryID=input("Kindly enter the Service_Code TO BE DELETED")
             Curry.execute("DELETE FROM EXTRAS WHERE Service_Code="+str(PrimaryID))
+            db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="MENU":
         try:
             PrimaryID=input("Kindly enter the Item_ID TO BE DELETED")
             Curry.execute("DELETE FROM MENU WHERE Item_ID="+str(PrimaryID))
+            db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
 
@@ -182,6 +190,7 @@ def edit(TABLE):
                             Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
                         else:
                             Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                db.commit()
                 print("Successfully updated!")
                 break
             except:
@@ -219,6 +228,7 @@ def edit(TABLE):
                             Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
                         else:
                             Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+                db.commit()
                 print("Successfully updated!")
                 break
             except:
@@ -256,6 +266,7 @@ def edit(TABLE):
                             Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
                         else:
                             Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+                db.commit()
                 print("Successfully updated!")
                 break
             except:
@@ -325,6 +336,7 @@ def register():
         roomNO=CROOM[0][8]+1
     tempfile['roomNO']=roomNO
     Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no="+str(roomNo)+" WHERE RoomID="+str(roomID))
+    db.commit()
     room_bill=int(CROOM[2])*NON
 
     Curry.execute("SELECT * FROM EXTRAS")
@@ -355,6 +367,7 @@ def register():
 
     # FINALLY!!!! TIME TO INSERT THE CUSTOMER, IT WAS SO CUMBERSOME!!!!!!!!
     Curry.execute("INSERT INTO CUSTOMERS VALUES ("+str(CID)+", "+CustomerName+", "+str(PhoneNo)+", "+Email+", "+str(roomID)+", "+str(CROOM[1])+", "+str(roomNO)+", CURDATE(), DATE_ADD(CURDATE(), INTERVAL "+str(NON)+" DAY), "+str(NON)+", "+str(room_bill)+", "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
+    db.commit()
 
 def login():
     while True:
@@ -436,6 +449,7 @@ def CustomerDashboard(CID):
             Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
         else:
             Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
+        db.commit()
     while True:
         Curry.execute("SELECT * FROM CUSTOMERS WHERE Customer_ID="+str(CID))
         customer=Curry.fetchone()
@@ -490,6 +504,7 @@ def CustomerDashboard(CID):
                 else:
                     Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
                 Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {customer}")
+                db.commit()
 
         else:
             Curry.execute("SELECT * FROM MENU")
@@ -529,11 +544,13 @@ def CustomerDashboard(CID):
                             else:
                                 break
                         Curry.execute("INSERT INTO ORDERS VALUES ("+str(OID)+", "+str(CID)+", "+str(customer[6])+", "+item_id+", "+str(quantity)+", CURDATE())")
+                        db.commit()
                         break
                     else:
                         print("Invalid Item ID. Please try again.")
 
             Curry.execute("UPDATE CUSTOMERS SET Extra_Costs="+str(total_price)+" WHERE Customer_ID="+str(CID))
+            db.commit()
             print(f"\nTotal Price: ₹{total_price}")
             print("Thank you for your order!")
 
@@ -638,6 +655,7 @@ def AdminDashboard(AID):
                     print("Your key, REQUIRED for LOGIN:",dkey)
                     tempfile['EncPass']=xor_encrypt(password, dkey)
                     Curry.execute(f"INSERT INTO ADMINS VALUES ({Admin_ID},{tempfile['EncPass']})")
+                    db.commit()
                     break
                 except:
                     print("<!> Invalid! Try again!")
@@ -658,6 +676,7 @@ def AdminDashboard(AID):
                     print("Your key, REQUIRED for LOGIN:",dkey)
                     tempfile['EncPass']=xor_encrypt(password, dkey)
                     Curry.execute(f"UPDATE ADMINS SET EncPass={tempfile['EncPass']} WHERE Admin_ID={Admin_ID}")
+                    db.commit()
                     break
                 except:
                     print("<!> Invalid action, please retry!")
@@ -748,7 +767,7 @@ if ('Liebeshotel',) not in CurrentDBS:
             Item_ID CHAR(6) PRIMARY KEY,
             Item_Name VARCHAR(50) NOT NULL,
             Category VARCHAR(30) NOT NULL,
-            Price INT NOT NULL,
+            Price INT NOT NULL
         )
     """)
     Curry.execute("""
@@ -758,7 +777,7 @@ if ('Liebeshotel',) not in CurrentDBS:
             Room_No INT,
             Item_ID CHAR(6) NOT NULL,
             Quantity INT NOT NULL,
-            Order_Date DATE NOT NULL,
+            Order_Date DATE NOT NULL
         )
     """)
     Curry.execute("""
@@ -767,44 +786,51 @@ if ('Liebeshotel',) not in CurrentDBS:
             EncPass VARCHAR(50) NOT NULL
         )
     """)
+    
+    # SAMPLE DATA Specifically for you~~
+    Curry.execute("""
+    INSERT INTO ROOMS
+    VALUES
+        ('101', 'Single Room', 2000, 1, 'Wi-Fi, TV, Desk, Mini-Bar', 20, 20, 1, NULL),
+        ('102', 'Standard Twin Room', 3000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar', 15, 15, 21, NULL),
+        ('201', 'Deluxe Double Room', 5000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar, Coffee Machine, Seating Area', 10, 10, 36, NULL),
+        ('301', 'Junior Suite', 8000, 3, 'Wi-Fi, TV, Desk, Wardrobe, Sofa, Premium Decor, Bath and Shower, Mini-Bar', 5, 5, 46, NULL),
+        ('401', 'Presidential Suite', 20000, 4, 'Wi-Fi, TV, Desk, Wardrobe, Jacuzzi, Butler Service, Smart Devices, Mini-Bar', 3, 3, 51, NULL)
+    """)
+    Curry.execute("""
+    INSERT INTO EXTRAS
+    VALUES
+        ('SVC001', 'Minifridge Access', '200', 'Access to minibar items (snacks, drinks) in the room.'),
+        ('SVC003', 'Playroom Card Access', '150', 'Access to the hotel playroom for recreational use.'),
+        ('SVC004', 'Spa Services', '1500', 'Access to spa treatments, massages, sauna, beauty services.'),
+        ('SVC005', 'Transportation', '1250', 'Airport transfers, taxi services, or guided tours.'),
+        ('SVC006', 'Laundry Service', '300', 'Wash, dry, and fold services for clothes.'),
+        ('SVC007', 'Parking Fees', '300', 'Access to hotel parking space.')
+    """)
+    Curry.execute("""
+    INSERT INTO MENU
+    VALUES
+        ('ITM001', 'Margherita Pizza', 'Main Course', 500),
+        ('ITM002', 'Caesar Salad', 'Appetizer', 250),
+        ('ITM003', 'Chocolate Lava Cake', 'Dessert', 300),
+        ('ITM004', 'Mango Smoothie', 'Beverage', 150),
+        ('ITM005', 'Grilled Chicken', 'Main Course', 600)
+    """)
+    db.commit()
+else:
+    Curry.execute("USE Liebeshotel")
 
 # Add an ADMIN, if NO ADMIN EXISTS
 Curry.execute("SELECT * FROM ADMINS")
-if Curry.fetchall()==():
+print(Curry.fetchall())
+if len(Curry.fetchall())==0:
     dkey=4269
     password='07JAN2009@X'
     tempfile['EncPass']=xor_encrypt(password, dkey)
-    Curry.execute(f"INSERT INTO ADMINS VALUES (ADM001,{tempfile['EncPass']})")
+    print(tempfile['EncPass'])
+    Curry.execute(f"INSERT INTO ADMINS VALUES ('ADM001','{tempfile['EncPass']}')")
+    db.commit()
 
-# SAMPLE DATA Specifically for you~~
-Curry.execute("""
-INSERT INTO ROOMS
-VALUES
-    ('101', 'Single Room', 2000, 1, 'Wi-Fi, TV, Desk, Mini-Bar', 20, 20, 1, NULL),
-    ('102', 'Standard Twin Room', 3000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar', 15, 15, 21, NULL),
-    ('201', 'Deluxe Double Room', 5000, 2, 'Wi-Fi, TV, Desk, Wardrobe, Mini-Bar, Coffee Machine, Seating Area', 10, 10, 36, NULL),
-    ('301', 'Junior Suite', 8000, 3, 'Wi-Fi, TV, Desk, Wardrobe, Sofa, Premium Decor, Bath and Shower, Mini-Bar', 5, 5, 46, NULL),
-    ('401', 'Presidential Suite', 20000, 4, 'Wi-Fi, TV, Desk, Wardrobe, Jacuzzi, Butler Service, Smart Devices, Mini-Bar', 3, 3, 51, NULL)
-""")
-Curry.execute("""
-INSERT INTO EXTRAS
-VALUES
-    ('SVC001', 'Minifridge Access', '200', 'Access to minibar items (snacks, drinks) in the room.'),
-    ('SVC003', 'Playroom Card Access', '150', 'Access to the hotel playroom for recreational use.'),
-    ('SVC004', 'Spa Services', '1500', 'Access to spa treatments, massages, sauna, beauty services.'),
-    ('SVC005', 'Transportation', '1250', 'Airport transfers, taxi services, or guided tours.'),
-    ('SVC006', 'Laundry Service', '300', 'Wash, dry, and fold services for clothes.'),
-    ('SVC007', 'Parking Fees', '300', 'Access to hotel parking space.')
-""")
-Curry.execute("""
-INSERT INTO MENU
-VALUES
-    ('ITM001', 'Margherita Pizza', 'Main Course', 500),
-    ('ITM002', 'Caesar Salad', 'Appetizer', 250),
-    ('ITM003', 'Chocolate Lava Cake', 'Dessert', 300),
-    ('ITM004', 'Mango Smoothie', 'Beverage', 150),
-    ('ITM005', 'Grilled Chicken', 'Main Course', 600)
-""")
 
 
 '''
@@ -824,13 +850,13 @@ txt=[
 
 for i in txt[0]:
     print(i, end='')
-    time.sleep(0.01)
+    time.sleep(0)
 for i in txt[1]:
     print(i, end='')
-    time.sleep(0.01)
+    time.sleep(0)
 for i in txt[2]:
     print(i, end='')
-    time.sleep(0.01)
+    time.sleep(0)
 
 '''
 III. The While loop
@@ -838,14 +864,14 @@ branch: Haneef, Radhe
 '''
 
 while True:
-    Curry.execute("USE Liebeshotel")
     Curry.execute("SELECT * FROM CUSTOMERS")
-    allcust==Curry.fecthall()
+    allcust=Curry.fetchall()
     current_date = datetime.now()
     formatted_date = current_date.strftime('%Y-%m-%d')
     for cust in allcust:
         if cust[8]==formatted_date:
             Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {cust}")
+            db.commit()
     login()
     if tempfile['accesstype']=='C':
         CustomerDashboard(tempfile['username'])
