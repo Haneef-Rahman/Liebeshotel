@@ -43,7 +43,7 @@ def xor_decrypt(encrypted_password, key):
     
     return decrypted_bytes.decode('utf-8')
 
-def Add(TABLE):
+def add(TABLE):
     if TABLE=="ROOMS":
         while True:
             try:
@@ -119,6 +119,9 @@ def delete(TABLE):
             PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
             Curry.execute("SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
             rec=Curry.fetchone[0]
+            Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
+            Prec=Curry.fetchone()
+            Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {Prec}")
             Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
             Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(rec))
             Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(rec))
@@ -141,6 +144,14 @@ def delete(TABLE):
             Curry.execute("DELETE FROM MENU WHERE Item_ID="+str(PrimaryID))
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
+
+def edit(TABLE):
+    if TABLE=="ROOMS":
+        while True:
+            try:
+                
+            except:
+                print("<!> Invalid Entry. Kindly retry.")
 
 def register():
     CustomerName=input("Enter vistor name: ")
@@ -463,6 +474,21 @@ def AdminDashboard(AID):
             delete("MENU")
 
         #All "Add" actions
+        elif act==2:
+            add("ROOMS")
+        elif act==9:
+            add("EXTRAS")
+        elif act==13:
+            add("MENU")
+
+        #All "Edit" actions
+        elif act==3:
+            edit("ROOMS")
+        elif act==10:
+            edit("EXTRAS")
+        elif act==14:
+            edit("MENU")
+
 
 '''
 I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
