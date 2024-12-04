@@ -101,12 +101,12 @@ def add(TABLE):
                 print("<!> Invalid Entry. Kindly retry.")
 
 def show(TABLE):
-    Curry.execute("SELECT * FROM", TABLE)
+    Curry.execute(f"SELECT * FROM {TABLE}")
     records=Curry.fetchall()
     header = [desc[0] for desc in Curry.description]
-    column_widths = [max(len(str(row[i])) for row in records) if records else 0 for i in range(len(headers))]
-    column_widths = [max(len(header), width) for header, width in zip(headers, column_widths)]
-    header_row = " | ".join(header.ljust(width) for header, width in zip(headers, column_widths))
+    column_widths = [max(len(str(row[i])) for row in records) if records else 0 for i in range(len(header))]
+    column_widths = [max(len(header), width) for header, width in zip(header, column_widths)]
+    header_row = " | ".join(header.ljust(width) for header, width in zip(header, column_widths))
     print(header_row)
     print("-" * len(header_row))
     for record in records:
@@ -383,12 +383,12 @@ def login():
             name=input("Enter adminID: ")
             Curry.execute("SELECT Admin_ID FROM ADMINS")
             Names=list(Curry.fetchall())
-            if "('"+name+"',)" in Names:
+            if (f'{name}',) in Names:
                 break
             else:
                 print("<!> Invalid. Admin with name",name,"does not exist.")
         tempfile['username']=name
-        Curry.execute("SELECT EncPass from ADMINS WHERE Admin_ID="+name)
+        Curry.execute(f"SELECT EncPass from ADMINS WHERE Admin_ID='{name}'")
         result=Curry.fetchone()
         tempfile['EncPass']=result[0]
         seclock=5
@@ -582,7 +582,7 @@ def AdminDashboard(AID):
         print("Actions:")
         for act in Actions:
             print(" "*5,end='')
-            print(act)
+            print(act, Actions[act])
         while True:
             try:
                 act=int(input("<?> Enter choice: "))
@@ -822,12 +822,10 @@ else:
 
 # Add an ADMIN, if NO ADMIN EXISTS
 Curry.execute("SELECT * FROM ADMINS")
-print(Curry.fetchall())
 if len(Curry.fetchall())==0:
     dkey=4269
     password='07JAN2009@X'
     tempfile['EncPass']=xor_encrypt(password, dkey)
-    print(tempfile['EncPass'])
     Curry.execute(f"INSERT INTO ADMINS VALUES ('ADM001','{tempfile['EncPass']}')")
     db.commit()
 
