@@ -30,7 +30,7 @@ def xor_encrypt(password, key):
     encrypted_bytes = bytearray()
     for i in range(len(password_bytes)):
         encrypted_bytes.append(password_bytes[i] ^ key_repeated[i])
-    
+
     return encrypted_bytes.hex()
 
 def xor_decrypt(encrypted_password, key):
@@ -40,7 +40,7 @@ def xor_decrypt(encrypted_password, key):
     decrypted_bytes = bytearray()
     for i in range(len(encrypted_bytes)):
         decrypted_bytes.append(encrypted_bytes[i] ^ key_repeated[i])
-    
+
     return decrypted_bytes.decode('utf-8')
 
 def add(TABLE):
@@ -160,8 +160,9 @@ def edit(TABLE):
                 Atr=input("Enter the name of the column to be changed: ")
                 show(TABLE)
                 rID=input("Enter the Room_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
-                Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
-                print("Old value:",Curry.fetchone())
+                if rID.lower()!="all":
+                    Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
+                    print("Old value:",Curry.fetchone())
                 for col in desc:
                     if "int" in col[1]:
                         alt=int(input("Enter new value (integral): "))
@@ -196,27 +197,28 @@ def edit(TABLE):
                 Atr=input("Enter the name of the column to be changed: ")
                 show(TABLE)
                 eID=input("Enter the Service_Code of the record to be changed (Enter 'all' if all records are to be altered): ")
-                Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={eID}")
-                print("Old value:",Curry.fetchone())
+                if eID.lower()!='all':
+                    Curry.execute(f"SELECT {Atr} FROM EXTRAS WHERE Service_Code={eID}")
+                    print("Old value:",Curry.fetchone())
                 for col in desc:
                     if "int" in col[1]:
                         alt=int(input("Enter new value (integral): "))
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={eID}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
                     elif "varchar" in col[1]:
                         alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={eID}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
                     else:
                         alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={eID}")
+                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
                 print("Successfully updated!")
                 break
             except:
@@ -232,27 +234,28 @@ def edit(TABLE):
                 Atr=input("Enter the name of the column to be changed: ")
                 show(TABLE)
                 iID=input("Enter the Item_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
-                Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={iID}")
-                print("Old value:",Curry.fetchone())
+                if iID.lower()!="all":
+                    Curry.execute(f"SELECT {Atr} FROM MENU WHERE Item_ID={iID}")
+                    print("Old value:",Curry.fetchone())
                 for col in desc:
                     if "int" in col[1]:
                         alt=int(input("Enter new value (integral): "))
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={iID}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
                     elif "varchar" in col[1]:
                         alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={iID}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
                     else:
                         alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
                         if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
                         else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={iID}")
+                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
                 print("Successfully updated!")
                 break
             except:
@@ -349,7 +352,7 @@ def register():
         else:
             print(f"Invalid service code: {code}")
     valid_codes_string = ", ".join(valid_codes)
-    
+
     # FINALLY!!!! TIME TO INSERT THE CUSTOMER, IT WAS SO CUMBERSOME!!!!!!!!
     Curry.execute("INSERT INTO CUSTOMERS VALUES ("+str(CID)+", "+CustomerName+", "+str(PhoneNo)+", "+Email+", "+str(roomID)+", "+str(CROOM[1])+", "+str(roomNO)+", CURDATE(), DATE_ADD(CURDATE(), INTERVAL "+str(NON)+" DAY), "+str(NON)+", "+str(room_bill)+", "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
 
@@ -470,7 +473,7 @@ def CustomerDashboard(CID):
                     Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
                 else:
                     Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
-                
+
         else:
             Curry.execute("SELECT * FROM MENU")
             menu_items = cursor.fetchall()
@@ -495,7 +498,7 @@ def CustomerDashboard(CID):
                         print(f"Price: ₹{item[3]}")
                         quantity = int(input(f"How many of {item[1]} would you like to order? "))
                         total_price += item[3] * quantity
-                        
+
                         Curry.execute("SELECT Order_ID FROM ORDERS")
                         OIDs=Curry.fetchall()
                         while True:
@@ -568,7 +571,7 @@ def AdminDashboard(AID):
             show("MENU")
         elif act==16:
             show("ORDERS")
-        
+
         #All "Delete" actions
         elif act==4:
             delete("ROOMS")
@@ -786,7 +789,7 @@ print(Curry.fetchall())
 
 '''
 II. Main interface
-<comments> LOOP starts after this, this won't display again, so don't include 
+<comments> LOOP starts after this, this won't display again, so don't include
 information that needs to be displayed again.
 branch: Haneef, Vasu
 '''
@@ -820,4 +823,3 @@ while True:
         CustomerDashboard(tempfile['username'])
     elif tempfile['accesstype']=='A':
         AdminDashboard(tempfile['username'])
-
