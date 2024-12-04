@@ -290,7 +290,7 @@ def register():
     RoomID=[]
     print("\n================= Available Rooms =================\n")
     for room in ROOMS:
-        room_id, room_type, price, max_occupancy, amenities = room
+        room_id=room[0]; room_type=room[1]; price=room[2]; max_occupancy=room[3]; amenities=room[4]
         RoomID.append(room_id)
 
         print(f"Room ID:           {room_id}")
@@ -301,7 +301,7 @@ def register():
         print("\n" + "-" * 50 + "\n")
     while True:
         try:
-            roomID=int(input("Enter room ID of room of choice: "))
+            roomID=input("Enter room ID of room of choice: ")
             if roomID in RoomID:
                 break
             else:
@@ -335,7 +335,7 @@ def register():
     else:
         roomNO=CROOM[0][8]+1
     tempfile['roomNO']=roomNO
-    Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no="+str(roomNo)+" WHERE RoomID="+str(roomID))
+    Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no={roomNO} WHERE Room_ID='{roomID}'")
     db.commit()
     room_bill=int(CROOM[2])*NON
 
