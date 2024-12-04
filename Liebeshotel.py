@@ -624,10 +624,23 @@ def AdminDashboard(AID):
         elif act==18:
             while True:
                 try:
-                    Admin_ID=input("Enter Admin_ID: ")
-                    Curry.execute("SELECT Admin_ID FROM ADMINS")
-                    Admin_IDs=Curry.fetchall()
-                    
+                    while True:
+                       try:
+                            Admin_ID=input("Enter Admin_ID: ")
+                            Curry.execute("SELECT Admin_ID FROM ADMINS")
+                            Admin_IDs=Curry.fetchall()
+                            if f'({Admin_ID},)' not in Admin_IDs:
+                                break
+                       except:
+                            print("<!> Something went wrong.")
+                    password=input("Enter password: ")
+                    dkey=random.randint(1000,10000)
+                    print("Your key, REQUIRED for LOGIN:",dkey)
+                    tempfile['EncPass']=xor_encrypt(password, dkey)
+                    Curry.execute(f"UPDATE ADMINS SET EncPass={tempfile['EncPass']} WHERE Admin_ID={Admin_ID}")
+                    break
+                except:
+                    print("<!> Invalid action, please retry!")
         elif act==19:
             custom=input("Enter custom prompt (put chareters under ''): ")
             try:
