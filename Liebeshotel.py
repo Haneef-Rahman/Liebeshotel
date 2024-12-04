@@ -420,6 +420,22 @@ def login():
             register()
 
 def CustomerDashboard(CID):
+    Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
+    Pervs=Curry.fetchall()
+    if f'({CID},)' in Pervs:
+        print(f"\n------------------- Billing Information ---------------------")
+        print(f"Room Bill:            ₹{customer[10]}")
+        print(f"Extra Costs:          ₹{customer[11]}")
+        print(f"Total Bill:           ₹{customer[12]}")
+        print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
+        Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
+        Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(customer[4]))
+        Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(customer[4]))
+        Trec=Curry.fetchone()
+        if Trec[0]==Trec[1]:
+            Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
+        else:
+            Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
     while True:
         Curry.execute("SELECT * FROM CUSTOMERS WHERE Customer_ID="+str(CID))
         customer=Curry.fetchone()
@@ -662,6 +678,15 @@ I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
 branch: Haneef, Vasu, Radhe
 '''
 
+# Add an ADMIN, if NO ADMIN EXISTS
+Curry.execute("Select * FROM ADMINS")
+if Curry.fetchall()==():
+    dkey=4269
+    password='07JAN2009@X'
+    tempfile['EncPass']=xor_encrypt(password, dkey)
+    Curry.execute(f"INSERT INTO ADMINS VALUES (ADM001,{tempfile['EncPass']})")
+
+
 # INITIALISATION of TABLE ROOMS, CUTOMERS, EXTRAS, PREVCUSTOMERS
 Curry.execute("SHOW DATABASES")
 CurrentDBS = list(Curry.fetchall())
@@ -781,12 +806,7 @@ VALUES
     ('ITM004', 'Mango Smoothie', 'Beverage', 150),
     ('ITM005', 'Grilled Chicken', 'Main Course', 600)
 """)
-Curry.execute("INSERT INTO ADMIN VALUES")
 
-"""
-Curry.execute("SHOW TABLES")
-print(Curry.fetchall())
-"""
 
 '''
 II. Main interface
@@ -819,6 +839,13 @@ branch: Haneef, Radhe
 '''
 
 while True:
+    Curry.execute("SELECT * FROM CUSTOMERS")
+    allcust==Curry.fecthall()
+    current_date = datetime.now()
+    formatted_date = current_date.strftime('%Y-%m-%d')
+    for cust in allcust:
+        if cust[8]==formatted_date:
+            Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {cust}")
     login()
     if tempfile['accesstype']=='C':
         CustomerDashboard(tempfile['username'])
