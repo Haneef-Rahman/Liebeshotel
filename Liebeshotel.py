@@ -55,7 +55,7 @@ def add(TABLE):
                 Tot=int(input("Enter total no. of rooms (integral): "))
                 Curry.execute("SELECT MAX(Beginning_no) FROM ROOMS")
                 Tbeg=Curry.fetchone(); Tbeg=Tbeg[0]
-                Curry.execute("SELECT Total_Rooms FROM ROOMS WHERE Beginning_no="str(Tbeg))
+                Curry.execute("SELECT Total_Rooms FROM ROOMS WHERE Beginning_no="+str(Tbeg))
                 Ttot=Curry.fetchone(); Ttot=Ttot[0]
                 Beg=int(Tbeg)+int(Ttot)
                 Curry.execute(f"""
@@ -678,13 +678,6 @@ I. INITIALISATION of DATABASES > TABLES > INSERTION OF SAMPLE DATA
 branch: Haneef, Vasu, Radhe
 '''
 
-# Add an ADMIN, if NO ADMIN EXISTS
-Curry.execute("Select * FROM ADMINS")
-if Curry.fetchall()==():
-    dkey=4269
-    password='07JAN2009@X'
-    tempfile['EncPass']=xor_encrypt(password, dkey)
-    Curry.execute(f"INSERT INTO ADMINS VALUES (ADM001,{tempfile['EncPass']})")
 
 
 # INITIALISATION of TABLE ROOMS, CUTOMERS, EXTRAS, PREVCUSTOMERS
@@ -757,7 +750,6 @@ if ('Liebeshotel',) not in CurrentDBS:
             Category VARCHAR(30) NOT NULL,
             Price INT NOT NULL,
         )
-
     """)
     Curry.execute("""
         CREATE TABLE ORDERS (
@@ -776,6 +768,13 @@ if ('Liebeshotel',) not in CurrentDBS:
         )
     """)
 
+# Add an ADMIN, if NO ADMIN EXISTS
+Curry.execute("SELECT * FROM ADMINS")
+if Curry.fetchall()==():
+    dkey=4269
+    password='07JAN2009@X'
+    tempfile['EncPass']=xor_encrypt(password, dkey)
+    Curry.execute(f"INSERT INTO ADMINS VALUES (ADM001,{tempfile['EncPass']})")
 
 # SAMPLE DATA Specifically for you~~
 Curry.execute("""
@@ -839,6 +838,7 @@ branch: Haneef, Radhe
 '''
 
 while True:
+    Curry.execute("USE Liebeshotel")
     Curry.execute("SELECT * FROM CUSTOMERS")
     allcust==Curry.fecthall()
     current_date = datetime.now()
