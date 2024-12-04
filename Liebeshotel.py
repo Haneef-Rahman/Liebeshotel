@@ -473,6 +473,7 @@ def CustomerDashboard(CID):
                     Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
                 else:
                     Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
+                Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {customer}")
 
         else:
             Curry.execute("SELECT * FROM MENU")
