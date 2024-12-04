@@ -63,6 +63,7 @@ def add(TABLE):
                         '{Room_ID}','{Room_Type}',{PricePN},{Occ},'{Amenities}',{Tot},{Tot},{Beg},NULL
                     )
                 """)
+                break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
     elif TABLE=="EXTRAS":
@@ -77,6 +78,7 @@ def add(TABLE):
                         '{Service_Code}','{Service_Name}',{Cost_Per_Unit},'{Description}'
                     )
                 """)
+                break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
     elif TABLE=="MENU":
@@ -91,6 +93,7 @@ def add(TABLE):
                         '{Item_ID}','{Item_Name_Name}','{Category}',{Price}
                     )
                 """)
+                break
             except:
                 print("<!> Invalid Entry. Kindly retry.")
 
@@ -149,7 +152,38 @@ def edit(TABLE):
     if TABLE=="ROOMS":
         while True:
             try:
-                
+                Curry.execute(f"DESCRIBE {TABLE}")
+                desc=Curry.fetchall()
+                print("column name, column parameter (type)")
+                for col in desc:
+                    print(col[0],",",col[1],", NULL:",col[2])
+                Atr=input("Enter the name of the column to be changed: ")
+                show(TABLE)
+                rID=input("Enter the Room_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
+                Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
+                print("Old value:",Curry.fetchone())
+                for col in desc:
+                    if "int" in col[1]:
+                        alt=int(input("Enter new value (integral): "))
+                        if rID.lower()=="all":
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                        else:
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                    elif "varchar" in col[1]:
+                        alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
+                        if rID.lower()=="all":
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                        else:
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                    else:
+                        alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
+                        if rID.lower()=="all":
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                        else:
+                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                print("Successfully updated!")
+                break
+                        
             except:
                 print("<!> Invalid Entry. Kindly retry.")
 
