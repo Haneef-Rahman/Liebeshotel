@@ -335,7 +335,7 @@ def register():
     else:
         roomNO=CROOM[0][8]+1
     tempfile['roomNO']=roomNO
-    Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no={roomNO} WHERE Room_ID='{roomID}'")
+    Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms-1, Latest_used_no={roomNO} WHERE Room_ID='{roomID}'")
     db.commit()
     room_bill=int(CROOM[2])*NON
 
