@@ -328,7 +328,7 @@ def register():
         else:
             break
     Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
-    CROOM=Curry.fetchall()
+    CROOM=Curry.fetchone()
     tempfile['username']=CID
     if CROOM[0][8]==None:
         roomNO=CROOM[0][7]
