@@ -816,18 +816,17 @@ if ('Liebeshotel',) not in CurrentDBS:
         ('ITM004', 'Mango Smoothie', 'Beverage', 150),
         ('ITM005', 'Grilled Chicken', 'Main Course', 600)
     """)
+    # Add an ADMIN, if NO ADMIN EXISTS
+    Curry.execute("SELECT * FROM ADMINS")
+    if len(Curry.fetchall())==0:
+        dkey=4269
+        password='07JAN2009@X'
+        tempfile['EncPass']=xor_encrypt(password, dkey)
+        Curry.execute(f"INSERT INTO ADMINS VALUES ('ADM001','{tempfile['EncPass']}')")
     db.commit()
 else:
     Curry.execute("USE Liebeshotel")
 
-# Add an ADMIN, if NO ADMIN EXISTS
-Curry.execute("SELECT * FROM ADMINS")
-if len(Curry.fetchall())==0:
-    dkey=4269
-    password='07JAN2009@X'
-    tempfile['EncPass']=xor_encrypt(password, dkey)
-    Curry.execute(f"INSERT INTO ADMINS VALUES ('ADM001','{tempfile['EncPass']}')")
-    db.commit()
 
 
 
