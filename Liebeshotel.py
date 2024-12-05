@@ -125,7 +125,7 @@ def delete(TABLE):
         try:
             PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
             Curry.execute("SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
-            rec=Curry.fetchone[0]
+            rec=Curry.fetchone()[0]
             Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
             Prec=Curry.fetchone()
             Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {Prec}")
