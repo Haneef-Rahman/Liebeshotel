@@ -55,7 +55,7 @@ def add(TABLE):
                 Tot=int(input("Enter total no. of rooms (integral): "))
                 Curry.execute("SELECT MAX(Beginning_no) FROM ROOMS")
                 Tbeg=Curry.fetchone(); Tbeg=Tbeg[0]
-                Curry.execute("SELECT Total_Rooms FROM ROOMS WHERE Beginning_no="+str(Tbeg))
+                Curry.execute(f"SELECT Total_Rooms FROM ROOMS WHERE Beginning_no={int(Tbeg)}")
                 Ttot=Curry.fetchone(); Ttot=Ttot[0]
                 Beg=int(Tbeg)+int(Ttot)
                 Curry.execute(f"""
@@ -117,41 +117,41 @@ def delete(TABLE):
     if TABLE=="ROOMS":
         try:
             PrimaryID=input("Kindly enter the Room_ID TO BE DELETED")
-            Curry.execute("DELETE FROM ROOMS WHERE Room_ID="+str(PrimaryID))
+            Curry.execute(f"DELETE FROM ROOMS WHERE Room_ID='{str(PrimaryID)}'")
             db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="CUSTOMERS":
         try:
             PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
-            Curry.execute("SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
+            Curry.execute(f"SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID='{str(PrimaryID)}'")
             rec=Curry.fetchone()[0]
             Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
             Prec=Curry.fetchone()
             Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {Prec}")
             db.commit()
-            Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(PrimaryID))
-            Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(rec))
-            Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(rec))
+            Curry.execute(f"DELETE FROM CUSTOMERS WHERE Customer_ID='{str(PrimaryID)}'")
+            Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID='{str(rec)}'")
+            Curry.execute(f"SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID='{str(rec)}'")
             Trec=Curry.fetchone()
             if Trec[0]==Trec[1]:
-                Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(rec))
+                Curry.execute(f"UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID='{str(rec)}'")
             else:
-                Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(rec))
+                Curry.execute(f"UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID='{str(rec)}'")
             db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="EXTRAS":
         try:
             PrimaryID=input("Kindly enter the Service_Code TO BE DELETED")
-            Curry.execute("DELETE FROM EXTRAS WHERE Service_Code="+str(PrimaryID))
+            Curry.execute(f"DELETE FROM EXTRAS WHERE Service_Code='{str(PrimaryID)}'")
             db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="MENU":
         try:
             PrimaryID=input("Kindly enter the Item_ID TO BE DELETED")
-            Curry.execute("DELETE FROM MENU WHERE Item_ID="+str(PrimaryID))
+            Curry.execute(f"DELETE FROM MENU WHERE Item_ID='{str(PrimaryID)}'")
             db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
@@ -327,7 +327,7 @@ def register():
                 break
         else:
             break
-    Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
+    Curry.execute(f"SELECT * FROM ROOMS WHERE Room_ID='{str(roomID)}'")
     CROOM=Curry.fetchone()
     tempfile['username']=CID
     if CROOM[8]==None:
@@ -366,7 +366,7 @@ def register():
     valid_codes_string = ", ".join(valid_codes)
 
     # FINALLY!!!! TIME TO INSERT THE CUSTOMER, IT WAS SO CUMBERSOME!!!!!!!!
-    Curry.execute(f"INSERT INTO CUSTOMERS VALUES ("{str(CID)}", "{CustomerName}", "{str(PhoneNo)}", "{Email}", "{str(roomID)}", {int(CROOM[1])}, "{str(roomNO)}", CURDATE(), DATE_ADD(CURDATE(), INTERVAL {int(NON)} DAY), {int(NON)}, {str(room_bill)}, "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
+    Curry.execute(f'INSERT INTO CUSTOMERS VALUES ("{str(CID)}", "{CustomerName}", "{str(PhoneNo)}", "{Email}", "{str(roomID)}", {int(roomNO)}, "{str(CROOM[1])}", CURDATE(), DATE_ADD(CURDATE(), INTERVAL {int(NON)} DAY), {int(NON)}, {int(room_bill)}, {int(extra_costs)}, {int(room_bill)+int(extra_costs)}, "{valid_codes_string}")')
     db.commit()
 
 def login():
@@ -441,17 +441,17 @@ def CustomerDashboard(CID):
         print(f"Extra Costs:          ₹{customer[11]}")
         print(f"Total Bill:           ₹{customer[12]}")
         print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
-        Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
-        Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(customer[4]))
-        Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(customer[4]))
+        Curry.execute(f"DELETE FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
+        Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID='{str(customer[4])}'")
+        Curry.execute(f"SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID='{str(customer[4])}'")
         Trec=Curry.fetchone()
         if Trec[0]==Trec[1]:
-            Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
+            Curry.execute(f"UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID='{str(customer[4])}'")
         else:
-            Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
+            Curry.execute(f"UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID='{str(customer[4])}'")
         db.commit()
     while True:
-        Curry.execute("SELECT * FROM CUSTOMERS WHERE Customer_ID="+str(CID))
+        Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
         customer=Curry.fetchone()
         now = datetime.now()
         formatted_date = now.strftime("%A, %d %B, %Y")
@@ -495,14 +495,14 @@ def CustomerDashboard(CID):
                 print(f"Extra Costs:          ₹{customer[11]}")
                 print(f"Total Bill:           ₹{customer[12]}")
                 print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
-                Curry.execute("DELETE FROM CUSTOMERS WHERE Customer_ID="+str(CID))
-                Curry.execute("UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID="+str(customer[4]))
-                Curry.execute("SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID="+str(customer[4]))
+                Curry.execute(f"DELETE FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
+                Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID='{str(customer[4])}'")
+                Curry.execute(f"SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID='{str(customer[4])}'")
                 Trec=Curry.fetchone()
                 if Trec[0]==Trec[1]:
-                    Curry.execute("UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID="+str(customer[4]))
+                    Curry.execute(f"UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID='{str(customer[4])}'")
                 else:
-                    Curry.execute("UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID="+str(customer[4]))
+                    Curry.execute(f"UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID='{str(customer[4])}'")
                 Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {customer}")
                 db.commit()
 
@@ -543,13 +543,13 @@ def CustomerDashboard(CID):
                                     break
                             else:
                                 break
-                        Curry.execute("INSERT INTO ORDERS VALUES ("+str(OID)+", "+str(CID)+", "+str(customer[6])+", "+item_id+", "+str(quantity)+", CURDATE())")
+                        Curry.execute(f"INSERT INTO ORDERS VALUES ('{str(OID)}', '{str(CID)}', {int(customer[6])}, '{item_id}', {str(quantity)}, CURDATE())")
                         db.commit()
                         break
                     else:
                         print("Invalid Item ID. Please try again.")
 
-            Curry.execute("UPDATE CUSTOMERS SET Extra_Costs="+str(total_price)+" WHERE Customer_ID="+str(CID))
+            Curry.execute(f"UPDATE CUSTOMERS SET Extra_Costs={str(total_price)} WHERE Customer_ID='{str(CID)}'")
             db.commit()
             print(f"\nTotal Price: ₹{total_price}")
             print("Thank you for your order!")
