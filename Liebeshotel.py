@@ -330,10 +330,10 @@ def register():
     Curry.execute("SELECT * FROM ROOMS WHERE Room_ID="+str(roomID))
     CROOM=Curry.fetchone()
     tempfile['username']=CID
-    if CROOM[0][8]==None:
-        roomNO=CROOM[0][7]
+    if CROOM[8]==None:
+        roomNO=CROOM[7]
     else:
-        roomNO=CROOM[0][8]+1
+        roomNO=CROOM[8]+1
     tempfile['roomNO']=roomNO
     Curry.execute(f"UPDATE ROOMS SET Available_Rooms = Available_Rooms - 1, Latest_used_no = {roomNO} WHERE Room_ID = '{roomID}'")
     db.commit()
@@ -366,7 +366,7 @@ def register():
     valid_codes_string = ", ".join(valid_codes)
 
     # FINALLY!!!! TIME TO INSERT THE CUSTOMER, IT WAS SO CUMBERSOME!!!!!!!!
-    Curry.execute("INSERT INTO CUSTOMERS VALUES ("+str(CID)+", "+CustomerName+", "+str(PhoneNo)+", "+Email+", "+str(roomID)+", "+str(CROOM[1])+", "+str(roomNO)+", CURDATE(), DATE_ADD(CURDATE(), INTERVAL "+str(NON)+" DAY), "+str(NON)+", "+str(room_bill)+", "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
+    Curry.execute(f"INSERT INTO CUSTOMERS VALUES ("{str(CID)}", "{CustomerName}", "{str(PhoneNo)}", "{Email}", "{str(roomID)}", {int(CROOM[1])}, "{str(roomNO)}", CURDATE(), DATE_ADD(CURDATE(), INTERVAL {int(NON)} DAY), {int(NON)}, {str(room_bill)}, "+str(extra_costs)+", "+str(room_bill+extra_costs)+", "+valid_codes_string+")")
     db.commit()
 
 def login():
