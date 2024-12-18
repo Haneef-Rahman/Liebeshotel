@@ -801,11 +801,11 @@ if ('Liebeshotel',) not in CurrentDBS:
     INSERT INTO EXTRAS
     VALUES
         ('SVC001', 'Minifridge Access', '200', 'Access to minibar items (snacks, drinks) in the room.'),
-        ('SVC003', 'Playroom Card Access', '150', 'Access to the hotel playroom for recreational use.'),
-        ('SVC004', 'Spa Services', '1500', 'Access to spa treatments, massages, sauna, beauty services.'),
-        ('SVC005', 'Transportation', '1250', 'Airport transfers, taxi services, or guided tours.'),
-        ('SVC006', 'Laundry Service', '300', 'Wash, dry, and fold services for clothes.'),
-        ('SVC007', 'Parking Fees', '300', 'Access to hotel parking space.')
+        ('SVC002', 'Playroom Card Access', '150', 'Access to the hotel playroom for recreational use.'),
+        ('SVC003', 'Spa Services', '1500', 'Access to spa treatments, massages, sauna, beauty services.'),
+        ('SVC004', 'Transportation', '1250', 'Airport transfers, taxi services, or guided tours.'),
+        ('SVC005', 'Laundry Service', '300', 'Wash, dry, and fold services for clothes.'),
+        ('SVC006', 'Parking Fees', '300', 'Access to hotel parking space.')
     """)
     Curry.execute("""
     INSERT INTO MENU
