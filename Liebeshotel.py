@@ -854,6 +854,7 @@ for i in txt[1]:
 for i in txt[2]:
     print(i, end='')
     time.sleep(0)
+input()
 
 '''
 III. The While loop
