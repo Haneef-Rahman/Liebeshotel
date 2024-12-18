@@ -158,119 +158,113 @@ def delete(TABLE):
 
 def edit(TABLE):
     if TABLE=="ROOMS":
-        while True:
-            try:
-                Curry.execute(f"DESCRIBE {TABLE}")
-                desc=Curry.fetchall()
-                print("column name, column parameter (type)")
-                for col in desc:
-                    print(col[0],",",col[1],", NULL:",col[2])
-                Atr=input("Enter the name of the column to be changed: ")
-                show(TABLE)
-                rID=input("Enter the Room_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
-                if rID.lower()!="all":
-                    Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
-                    print("Old value:",Curry.fetchone())
-                for col in desc:
-                    if "int" in col[1]:
-                        alt=int(input("Enter new value (integral): "))
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
-                    elif "varchar" in col[1]:
-                        alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+        try:
+            Curry.execute(f"DESCRIBE {TABLE}")
+            desc=Curry.fetchall()
+            print("column name, column parameter (type)")
+            for col in desc:
+                print(col[0],",",col[1],", NULL:",col[2])
+            Atr=input("Enter the name of the column to be changed: ")
+            show(TABLE)
+            rID=input("Enter the Room_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
+            if rID.lower()!="all":
+                Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
+                print("Old value:",Curry.fetchone())
+            for col in desc:
+                if "int" in col[1]:
+                    alt=int(input("Enter new value (integral): "))
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
                     else:
-                        alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
-                db.commit()
-                print("Successfully updated!")
-                break
-            except:
-                print("<!> Invalid Entry. Kindly retry.")
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                elif "varchar" in col[1]:
+                    alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                else:
+                    alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+            db.commit()
+            print("Successfully updated!")
+        except:
+            print("<!> Invalid Entry. Kindly retry.")
     elif TABLE=="EXTRAS":
-        while True:
-            try:
-                Curry.execute(f"DESCRIBE {TABLE}")
-                desc=Curry.fetchall()
-                print("column name, column parameter (type)")
-                for col in desc:
-                    print(col[0],",",col[1],", NULL:",col[2])
-                Atr=input("Enter the name of the column to be changed: ")
-                show(TABLE)
-                eID=input("Enter the Service_Code of the record to be changed (Enter 'all' if all records are to be altered): ")
-                if eID.lower()!='all':
-                    Curry.execute(f"SELECT {Atr} FROM EXTRAS WHERE Service_Code={eID}")
-                    print("Old value:",Curry.fetchone())
-                for col in desc:
-                    if "int" in col[1]:
-                        alt=int(input("Enter new value (integral): "))
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
-                    elif "varchar" in col[1]:
-                        alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+        try:
+            Curry.execute(f"DESCRIBE {TABLE}")
+            desc=Curry.fetchall()
+            print("column name, column parameter (type)")
+            for col in desc:
+                print(col[0],",",col[1],", NULL:",col[2])
+            Atr=input("Enter the name of the column to be changed: ")
+            show(TABLE)
+            eID=input("Enter the Service_Code of the record to be changed (Enter 'all' if all records are to be altered): ")
+            if eID.lower()!='all':
+                Curry.execute(f"SELECT {Atr} FROM EXTRAS WHERE Service_Code={eID}")
+                print("Old value:",Curry.fetchone())
+            for col in desc:
+                if "int" in col[1]:
+                    alt=int(input("Enter new value (integral): "))
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
                     else:
-                        alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
-                db.commit()
-                print("Successfully updated!")
-                break
-            except:
-                print("<!> Invalid Entry. Kindly retry.")
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+                elif "varchar" in col[1]:
+                    alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+                else:
+                    alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+            db.commit()
+            print("Successfully updated!")
+        except:
+            print("<!> Invalid Entry. Kindly retry.")
     if TABLE=="MENU":
-        while True:
-            try:
-                Curry.execute(f"DESCRIBE {TABLE}")
-                desc=Curry.fetchall()
-                print("column name, column parameter (type)")
-                for col in desc:
-                    print(col[0],",",col[1],", NULL:",col[2])
-                Atr=input("Enter the name of the column to be changed: ")
-                show(TABLE)
-                iID=input("Enter the Item_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
-                if iID.lower()!="all":
-                    Curry.execute(f"SELECT {Atr} FROM MENU WHERE Item_ID={iID}")
-                    print("Old value:",Curry.fetchone())
-                for col in desc:
-                    if "int" in col[1]:
-                        alt=int(input("Enter new value (integral): "))
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
-                    elif "varchar" in col[1]:
-                        alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+        try:
+            Curry.execute(f"DESCRIBE {TABLE}")
+            desc=Curry.fetchall()
+            print("column name, column parameter (type)")
+            for col in desc:
+                print(col[0],",",col[1],", NULL:",col[2])
+            Atr=input("Enter the name of the column to be changed: ")
+            show(TABLE)
+            iID=input("Enter the Item_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
+            if iID.lower()!="all":
+                Curry.execute(f"SELECT {Atr} FROM MENU WHERE Item_ID={iID}")
+                print("Old value:",Curry.fetchone())
+            for col in desc:
+                if "int" in col[1]:
+                    alt=int(input("Enter new value (integral): "))
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
                     else:
-                        alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
-                        if rID.lower()=="all":
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
-                        else:
-                            Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
-                db.commit()
-                print("Successfully updated!")
-                break
-            except:
-                print("<!> Invalid Entry. Kindly retry.")
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+                elif "varchar" in col[1]:
+                    alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+                else:
+                    alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
+                    if rID.lower()=="all":
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
+                    else:
+                        Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+            db.commit()
+            print("Successfully updated!")
+        except:
+            print("<!> Invalid Entry. Kindly retry.")
 
 
 def register():
