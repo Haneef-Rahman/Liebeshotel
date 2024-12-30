@@ -311,16 +311,13 @@ def register():
             print("<!> Invalid, kindly use integers only.")
     Curry.execute("SELECT Customer_ID FROM CUSTOMERS")
     CIDs=Curry.fetchall()
-    while True:
-        CID='C'+str(random.randint(10000, 99999))
+    CID = None
+    while CID is None:
+        CID = 'C' + str(random.randint(10000, 99999))
         for i in CIDs:
-            for j in i:
-                if j==CID:
-                    break
-            else:
+            if i[0] == CID:
+                CID = None
                 break
-        else:
-            break
     Curry.execute(f"SELECT * FROM ROOMS WHERE Room_ID='{str(roomID)}'")
     CROOM=Curry.fetchone()
     tempfile['username']=CID
@@ -527,16 +524,13 @@ def CustomerDashboard(CID):
 
                         Curry.execute("SELECT Order_ID FROM ORDERS")
                         OIDs=Curry.fetchall()
-                        while True:
+                        OID=None
+                        while OID is None:
                             OID='O'+str(random.randint(10000, 99999))
                             for i in OIDs:
-                                for j in i:
-                                    if j==OID:
-                                        break
-                                else:
+                                if i[0]==OID:
+                                    OID=None
                                     break
-                            else:
-                                break
                         Curry.execute(f"INSERT INTO ORDERS VALUES ('{str(OID)}', '{str(CID)}', {int(customer[6])}, '{item_id}', {str(quantity)}, CURDATE())")
                         db.commit()
                         break
@@ -632,17 +626,14 @@ def AdminDashboard(AID):
                 try:
                     Curry.execute("SELECT Admin_ID FROM ADMINS")
                     Admin_IDs=Curry.fetchall()
-                    while True:
+                    Admin_ID=None
+                    while Admin_ID is None:
                         Admin_Num=input("Enter admin number chosen: ")
                         Admin_ID='ADM'+Admin_Num
                         for i in Admin_IDs:
-                            for j in i:
-                                if j==Admin_ID:
-                                    break
-                            else:
+                            if i[0]==Admin_ID:
+                                Admin_ID=None
                                 break
-                        else:
-                            break
                     print("Your Admin_ID:",Admin_ID)
                     password=input("Enter password: ")
                     dkey=random.randint(1000,10000)
