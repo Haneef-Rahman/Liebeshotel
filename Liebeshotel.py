@@ -406,15 +406,18 @@ def login():
                 break
         tempfile['logintype']=loginType
         if loginType=='L':
-            while True:
+            name=None
+            while name is None:
                 name=input("Enter userID: ")
                 Curry.execute("SELECT Customer_ID FROM CUSTOMERS")
                 Names=list(Curry.fetchall())
-                if "('"+name+"',)" in Names:
-                    print("<#> Successful login!")
-                    break
+                for i in Names:
+                    if i[0]==name:
+                        print("<#> Successful login!")
+                        break
                 else:
                     print("<!> Invalid. Visitor with ID",name,"does not exist.")
+                    name=None
             tempfile['username']=name
             Curry.execute("SELECT Customer_ID FROM PREVCUSTOMERS")
             Names=list(Curry.fetchall())
