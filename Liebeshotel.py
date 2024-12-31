@@ -116,14 +116,14 @@ def show(TABLE):
 def delete(TABLE):
     if TABLE=="ROOMS":
         try:
-            PrimaryID=input("Kindly enter the Room_ID TO BE DELETED")
+            PrimaryID=input("Kindly enter the Room_ID TO BE DELETED: ")
             Curry.execute(f"DELETE FROM ROOMS WHERE Room_ID='{str(PrimaryID)}'")
             db.commit()
         except:
             print("<!> Action could not be proceeded with. Kindly check the ID/Code entered.")
     elif TABLE=="CUSTOMERS":
         try:
-            PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED")
+            PrimaryID=input("Kindly enter the Customer_ID TO BE DELETED: ")
             Curry.execute(f"SELECT Room_ID FROM CUSTOMERS WHERE Customer_ID='{str(PrimaryID)}'")
             rec=Curry.fetchone()[0]
             Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
@@ -284,15 +284,16 @@ def register():
     RoomID=[]
     print("\n================= Available Rooms =================\n")
     for room in ROOMS:
-        room_id=room[0]; room_type=room[1]; price=room[2]; max_occupancy=room[3]; amenities=room[4]
-        RoomID.append(room_id)
+        room_id=room[0]; room_type=room[1]; price=room[2]; max_occupancy=room[3]; amenities=room[4]; available_rooms=room[5]
+        if int(available_rooms) > 0:
+            RoomID.append(room_id)
 
-        print(f"Room ID:           {room_id}")
-        print(f"Room Type:         {room_type}")
-        print(f"Price per Night:   ₹{price}")
-        print(f"Max Occupancy:     {max_occupancy} Person(s)")
-        print(f"Amenities:         {amenities}")
-        print("\n" + "-" * 50 + "\n")
+            print(f"Room ID:           {room_id}")
+            print(f"Room Type:         {room_type}")
+            print(f"Price per Night:   ₹{price}")
+            print(f"Max Occupancy:     {max_occupancy} Person(s)")
+            print(f"Amenities:         {amenities}")
+            print("\n" + "-" * 50 + "\n")
     while True:
         try:
             roomID=input("Enter room ID of room of choice: ")
@@ -451,7 +452,7 @@ def CustomerDashboard(CID):
         formatted_date = now.strftime("%A, %d %B, %Y")
         print("\n"*10)
         print(f"{'Customer Dashboard':<50}{formatted_date:>50}",end='\n\n')
-        print("CUSTOMER ID:",user[0])
+        print("CUSTOMER ID:",CID)
         print(f"--------------------- Customer Information --------------------")
         print(f"Name:                 {customer[1]}")
         print(f"Contact Number:       {customer[2]}")
