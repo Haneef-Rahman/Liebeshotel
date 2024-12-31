@@ -128,8 +128,7 @@ def delete(TABLE):
             rec=Curry.fetchone()[0]
             Curry.execute(f"SELECT * FROM CUSTOMERS WHERE Customer_ID={PrimaryID}")
             Prec=Curry.fetchone()
-            Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {Prec}")
-            db.commit()
+            Curry.execute(f"INSERT INTO PREVCUSTOMERS SELECT * FROM CUSTOMERS WHERE Customer_ID='{str(PrimaryID)}'")
             Curry.execute(f"DELETE FROM CUSTOMERS WHERE Customer_ID='{str(PrimaryID)}'")
             Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID='{str(rec)}'")
             Curry.execute(f"SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID='{str(rec)}'")
