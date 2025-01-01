@@ -497,8 +497,9 @@ def CustomerDashboard(CID):
                     Curry.execute(f"UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID='{str(customer[4])}'")
                 else:
                     Curry.execute(f"UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID='{str(customer[4])}'")
-                Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {customer}")
+                Curry.execute(f"INSERT INTO PREVCUSTOMERS SELECT * FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
                 db.commit()
+                break
 
         else:
             Curry.execute("SELECT * FROM MENU")
