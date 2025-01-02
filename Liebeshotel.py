@@ -643,7 +643,7 @@ def AdminDashboard(AID):
                     dkey=random.randint(1000,10000)
                     print("Your key, REQUIRED for LOGIN:",dkey)
                     tempfile['EncPass']=xor_encrypt(password, dkey)
-                    Curry.execute(f"INSERT INTO ADMINS VALUES ({Admin_ID},{tempfile['EncPass']})")
+                    Curry.execute(f"INSERT INTO ADMINS VALUES ('{Admin_ID}','{tempfile['EncPass']}')")
                     db.commit()
                     break
                 except:
