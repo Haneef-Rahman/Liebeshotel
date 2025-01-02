@@ -1,4 +1,10 @@
 # Liebeshotel
+L         IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO   TTTTTTT   EEEEEEE   L
+L            I      E         B      B   E        S           H     H   O     O     T      E         L
+L            I      EEEE      BBBBBBB    EEEE      SSSSSSS    HHHHHHH   O     O     T      EEEE      L
+L            I      E         B      B   E                S   H     H   O     O     T      E         L
+LLLLLLL   IIIIIII   EEEEEEE   BBBBBBB    EEEEEEE   SSSSSSS    H     H    OOOOO      T      EEEEEEE   LLLLLLL
+
 # **Hotel Management System**
 
 This is a **Hotel Management System** project for school, built using **Python** and **MySQL** (via **pymysql**). The system helps to manage hotel operations, including room bookings, customer management, billing, and extra services.
