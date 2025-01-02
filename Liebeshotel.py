@@ -541,7 +541,8 @@ def CustomerDashboard(CID):
                     else:
                         print("Invalid Item ID. Please try again.")
 
-            Curry.execute(f"UPDATE CUSTOMERS SET Extra_Costs={str(total_price)} WHERE Customer_ID='{str(CID)}'")
+            Curry.execute(f"UPDATE CUSTOMERS SET Extra_Costs=Extra_Costs+{str(total_price)} WHERE Customer_ID='{str(CID)}'")
+            Curry.execute(f"UPDATE CUSTOMERS SET Total_Bill=Total_Bill+{str(total_price)} WHERE Customer_ID='{str(CID)}'")
             db.commit()
             print(f"\nTotal Price: ₹{total_price}")
             print("Thank you for your order!")
@@ -664,7 +665,7 @@ def AdminDashboard(AID):
                     dkey=random.randint(1000,10000)
                     print("Your key, REQUIRED for LOGIN:",dkey)
                     tempfile['EncPass']=xor_encrypt(password, dkey)
-                    Curry.execute(f"UPDATE ADMINS SET EncPass={tempfile['EncPass']} WHERE Admin_ID={Admin_ID}")
+                    Curry.execute(f"UPDATE ADMINS SET EncPass='{tempfile['EncPass']}' WHERE Admin_ID='{Admin_ID}'")
                     db.commit()
                     break
                 except:
