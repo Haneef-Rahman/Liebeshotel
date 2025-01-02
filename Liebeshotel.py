@@ -458,8 +458,8 @@ def CustomerDashboard(CID):
         print(f"Email:                {customer[3]}")
         print(f"\n------------------- Room Information ------------------------")
         print(f"Room ID:              {customer[4]}")
-        print(f"Room Number:          {customer[6]}")
-        print(f"Room Type:            {customer[5]}")
+        print(f"Room Number:          {customer[5]}")
+        print(f"Room Type:            {customer[6]}")
         print(f"Check-in Date:        {customer[7]}")
         print(f"Check-out Date:       {customer[8]}")
         print(f"Number of Nights:     {customer[9]}")
@@ -503,7 +503,7 @@ def CustomerDashboard(CID):
 
         else:
             Curry.execute("SELECT * FROM MENU")
-            menu_items = cursor.fetchall()
+            menu_items = Curry.fetchall()
             print("=========== MENU ===========")
             for item in menu_items:
                 print(f"Item ID: {item[0]}")
@@ -517,8 +517,8 @@ def CustomerDashboard(CID):
             for i in range(num_items):
                 while True:
                     item_id = input(f"Enter the Item_ID for item {i+1}: ")
-                    cursor.execute("SELECT * FROM MENU WHERE Item_ID = %s", (item_id,))
-                    item = cursor.fetchone()
+                    Curry.execute("SELECT * FROM MENU WHERE Item_ID = %s", (item_id,))
+                    item = Curry.fetchone()
 
                     if item:
                         print(f"Item Name: {item[1]}")
@@ -535,7 +535,7 @@ def CustomerDashboard(CID):
                                 if i[0]==OID:
                                     OID=None
                                     break
-                        Curry.execute(f"INSERT INTO ORDERS VALUES ('{str(OID)}', '{str(CID)}', {int(customer[6])}, '{item_id}', {str(quantity)}, CURDATE())")
+                        Curry.execute(f"INSERT INTO ORDERS VALUES ('{str(OID)}', '{str(CID)}', {int(customer[5])}, '{item_id}', {str(quantity)}, CURDATE())")
                         db.commit()
                         break
                     else:
