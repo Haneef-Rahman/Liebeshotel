@@ -489,6 +489,7 @@ def CustomerDashboard(CID):
                 print(f"Extra Costs:          ₹{customer[11]}")
                 print(f"Total Bill:           ₹{customer[12]}")
                 print("\nKindly Note that all payments must be made under 30 days of cancellation. Thank you for choosing us!")
+                Curry.execute(f"INSERT INTO PREVCUSTOMERS SELECT * FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
                 Curry.execute(f"DELETE FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
                 Curry.execute(f"UPDATE ROOMS SET Available_Rooms=Available_Rooms+1 WHERE Room_ID='{str(customer[4])}'")
                 Curry.execute(f"SELECT Beginning_no, Latest_used_no FROM ROOMS WHERE Room_ID='{str(customer[4])}'")
@@ -497,7 +498,6 @@ def CustomerDashboard(CID):
                     Curry.execute(f"UPDATE ROOMS SET Latest_used_no=NULL WHERE Room_ID='{str(customer[4])}'")
                 else:
                     Curry.execute(f"UPDATE ROOMS SET Latest_used_no=Latest_used_no-1 WHERE Room_ID='{str(customer[4])}'")
-                Curry.execute(f"INSERT INTO PREVCUSTOMERS SELECT * FROM CUSTOMERS WHERE Customer_ID='{str(CID)}'")
                 db.commit()
                 break
 
@@ -857,7 +857,7 @@ while True:
     formatted_date = current_date.strftime('%Y-%m-%d')
     for cust in allcust:
         if cust[8]==formatted_date:
-            Curry.execute(f"INSERT INTO PREVCUSTOMERS VALUES {cust}")
+            Curry.execute(f"INSERT INTO PREVCUSTOMERS SELECT * FROM CUSTOMERS WHERE Customer_ID='{cust[0]}'")
             db.commit()
     login()
     if tempfile['accesstype']=='C':
