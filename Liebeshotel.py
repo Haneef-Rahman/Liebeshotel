@@ -60,7 +60,7 @@ def add(TABLE):
                 Beg=int(Tbeg)+int(Ttot)
                 Curry.execute(f"""
                     INSERT INTO ROOMS VALUES(
-                        '{Room_ID}','{Room_Type}',{PricePN},{Occ},'{Amenities}',{Tot},{Tot},{Beg},NULL
+                        '{Room_ID}','{Room_Type}',{int(PricePN)},{int(Occ)},'{Amenities}',{int(Tot)},{int(Tot)},{int(Beg)},NULL
                     )
                 """)
                 db.commit()
@@ -179,15 +179,15 @@ def edit(TABLE):
                 elif "varchar" in col[1]:
                     alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
                 else:
                     alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
             db.commit()
             print("Successfully updated!")
         except:
@@ -215,15 +215,15 @@ def edit(TABLE):
                 elif "varchar" in col[1]:
                     alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}='{alt}' WHERE Service_Code={eID}")
                 else:
                     alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE EXTRAS SET {Atr}={alt} WHERE Service_Code={eID}")
+                        Curry.execute(f"UPDATE EXTRAS SET {Atr}='{alt}' WHERE Service_Code={eID}")
             db.commit()
             print("Successfully updated!")
         except:
@@ -251,15 +251,15 @@ def edit(TABLE):
                 elif "varchar" in col[1]:
                     alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE MENU SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+                        Curry.execute(f"UPDATE MENU SET {Atr}='{alt}' WHERE Item_ID={iID}")
                 else:
                     alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
                     if rID.lower()=="all":
-                        Curry.execute(f"UPDATE MENU SET {Atr}={alt}")
+                        Curry.execute(f"UPDATE MENU SET {Atr}='{alt}'")
                     else:
-                        Curry.execute(f"UPDATE MENU SET {Atr}={alt} WHERE Item_ID={iID}")
+                        Curry.execute(f"UPDATE MENU SET {Atr}='{alt}' WHERE Item_ID={iID}")
             db.commit()
             print("Successfully updated!")
         except:
