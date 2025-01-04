@@ -162,32 +162,41 @@ def edit(TABLE):
             desc=Curry.fetchall()
             print("column name, column parameter (type)")
             for col in desc:
-                print(col[0],",",col[1],", NULL:",col[2])
+                print(col[0], ",", col[1], ", NULL:", col[2])
             Atr=input("Enter the name of the column to be changed: ")
             show(TABLE)
             rID=input("Enter the Room_ID of the record to be changed (Enter 'all' if all records are to be altered): ")
             if rID.lower()!="all":
                 Curry.execute(f"SELECT {Atr} FROM ROOMS WHERE Room_ID={rID}")
-                print("Old value:",Curry.fetchone())
+                print("Old value:", Curry.fetchone())
+            col_type=None
             for col in desc:
-                if "int" in col[1]:
-                    alt=int(input("Enter new value (integral): "))
-                    if rID.lower()=="all":
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
-                    else:
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
-                elif "varchar" in col[1]:
-                    alt=input(f"Enter new value (maximum {col[1][8:][:-1]} charecters): ")
-                    if rID.lower()=="all":
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
-                    else:
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
+                if col[0] == Atr:
+                    col_type = col[1]
+                    break
+            
+            if col_type is None:
+                print("<!> Invalid column name. Kindly retry.")
+                return
+            
+            if "int" in col_type:
+                alt=int(input("Enter new value (integral): "))
+                if rID.lower()=="all":
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}={alt}")
                 else:
-                    alt=input(f"Enter new value (exactly {col[1][5:][:-1]} charecters): ")
-                    if rID.lower()=="all":
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
-                    else:
-                        Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}={alt} WHERE Room_ID={rID}")
+            elif "varchar" in col_type:
+                alt=input(f"Enter new value (maximum {col_type[8:][:-1]} characters): ")
+                if rID.lower()=="all":
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
+                else:
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
+            else:
+                alt=input(f"Enter new value (exactly {col_type[5:][:-1]} characters): ")
+                if rID.lower()=="all":
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}'")
+                else:
+                    Curry.execute(f"UPDATE ROOMS SET {Atr}='{alt}' WHERE Room_ID={rID}")
             db.commit()
             print("Successfully updated!")
         except:
