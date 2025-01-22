@@ -1,3 +1,10 @@
+# Project Title  : Liebeshotel
+# Version        : 1.0 2024-2025
+# Developed By   : Haneef Rahman, Radhe Nabi, Vasu Garg
+# Guide          : Hema Jain
+# Last Updated On: 2025-01-04
+
+
 import pymysql
 import random
 from datetime import datetime
